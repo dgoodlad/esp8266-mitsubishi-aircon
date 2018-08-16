@@ -72,7 +72,7 @@ void CaptivePortal::setupListener() {
                 message->write((uint8_t)packet.localIP()[2]);
                 message->write((uint8_t)packet.localIP()[3]);
 
-                size_t rl = packet.send(*message);
+                packet.send(*message);
 
                 delete message;
             }
