@@ -4,6 +4,16 @@
 const byte DNS_PORT = 53;
 IPAddress IP(192, 168, 1, 1);
 
+String iptostring(IPAddress ip) {
+    String res = "";
+    for (int i = 0; i < 3; i++)
+    {
+        res += String((ip >> (8 * i)) & 0xFF) + ".";
+    }
+    res += String(((ip >> 8 * 3)) & 0xFF);
+    return res;
+}
+
 CaptivePortal::CaptivePortal() {
     udp = new AsyncUDP;
 };
@@ -20,12 +30,24 @@ captive_portal_result CaptivePortal::start(char *name, AsyncWebServer *server) {
 
     if(!result) { return E_CAPTIVE_PORTAL_FAIL; }
 
+    server->onNotFound([](AsyncWebServerRequest *request) {
+        const String host = request->host();
+        String localIP = iptostring(request->client()->localIP());
+
+        if(host != localIP) {
+            request->redirect(String("http://") + localIP + String("/config"));
+        } else {
+            request->send(404, "text/plain", "Not Found");
+        }
+    });
+
     setupListener();
 
     return E_CAPTIVE_PORTAL_OK;
 }
 
 void CaptivePortal::stop(AsyncWebServer *server) {
+    server->onNotFound(NULL);
 }
 
 void CaptivePortal::setupListener() {
