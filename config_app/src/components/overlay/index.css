@@ -1,0 +1,25 @@
+.container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  z-index: 100;
+  display: flex;
+}
+
+.label {
+  font-size: 2rem;
+  line-height: 2rem;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 700;
+  text-align: center;
+  margin: auto;
+  width: 100%;
+  max-width: 20rem;
+}
+
+

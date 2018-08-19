@@ -1,0 +1,96 @@
+@value line-height, small, smallest, darker, lighter, lighter-highlight, lightest from 'configduino/modules/variables.css';
+
+html, body, div, span, h1, form, label, section, p, input, a, nav, ul, li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+ul, ol { list-style-type: none }
+
+html {
+  color: darker;
+  font-size: line-height;
+  line-height: line-height;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+body {
+  font-size: small;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  width: 100vw;
+  background-color: lighter;
+}
+
+.container {
+  width: 100%;
+  max-width: 20rem;
+  margin: 1rem auto;
+  background-color: lightest;
+  padding: 1rem;
+}
+
+@media screen and (min-width: 26rem) {
+  .container {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+}
+
+.panel {
+  composes: panel from 'configduino/modules/panel.css'
+}
+
+.heading {
+  composes: heading from 'configduino/modules/panel.css';
+}
+
+.form {
+  composes: form from 'configduino/modules/form.css';
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #dedede;
+  margin: 0 -1rem;
+  padding: 0 0.5rem;
+}
+
+.tab {
+  composes: link from 'configduino/modules/link.css';
+  display: block;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: smallest;
+  background-color: lighter;
+  border-radius: 3px 3px 0 0;
+  border: 1px solid lighter;
+  border-bottom: 1px solid lighter;
+  transition: background-color linear 0.2s, color linear 0.2s, border-color linear 0.2s;
+}
+
+.tab:hover {
+  background-color: lighter-highlight;
+  border-bottom: 1px solid lighter-highlight;
+  text-decoration: none;
+}
+
+.current-tab {
+  composes: tab;
+  border-bottom: 0;
+  background-color: lightest;
+  border: 1px solid lighter;
+  border-bottom: 1px solid lightest;
+  transform: scale(1.1);
+}
+
+.current-tab:hover {
+  background-color: lightest;
+  border-bottom: 1px solid lightest;
+}
