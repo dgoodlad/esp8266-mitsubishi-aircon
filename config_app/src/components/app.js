@@ -7,6 +7,7 @@ import Tab from 'configduino/components/tab';
 import Firmware from 'configduino/components/firmware';
 import WifiPanel from 'configduino/components/wifi-panel';
 import NetworkPanel from 'configduino/components/network-panel';
+import MqttPanel from 'configduino/components/mqtt-panel';
 import Button from 'configduino/components/button';
 
 import Input from 'configduino/components/input';
@@ -150,7 +151,7 @@ export default class App extends Component {
               <h3 className={styles.heading}>ESP-AC Settings</h3>
               
               <Input
-                label="Light Name"
+                label="Room Name"
                 type="text"
                 value={this.state.deviceName}
                 autocomplete="off"
@@ -167,6 +168,11 @@ export default class App extends Component {
               />
 
             <NetworkPanel
+              {...this.state}
+              onUpdate={this.update.bind(this)}
+              />
+
+            <MqttPanel
               {...this.state}
               onUpdate={this.update.bind(this)}
               />
