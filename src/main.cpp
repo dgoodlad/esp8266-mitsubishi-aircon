@@ -12,6 +12,8 @@
 
 #include <ArduinoJson.h>
 
+#include <HeatPump.h>
+
 char mqtt_host[255];
 char mqtt_port[6] = "8080";
 char mqtt_username[64];
