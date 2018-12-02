@@ -61,6 +61,14 @@ void heatpumpStatusChanged(heatpumpStatus status) {
     mqttClient.publish(mqtt_topic_current_temperature_state, 0, true, temperature);
 }
 
+void mqttConnect(bool sessionPresent) {
+    mqttClient.subscribe(mqtt_topic_power_command, 0);
+    mqttClient.subscribe(mqtt_topic_mode_command, 0);
+    mqttClient.subscribe(mqtt_topic_temperature_command, 0);
+    mqttClient.subscribe(mqtt_topic_fan_command, 0);
+    mqttClient.subscribe(mqtt_topic_vane_command, 0);
+}
+
 void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
     if(strcmp(topic, mqtt_topic_power_command)) {
         heatpump.setPowerSetting(payload);
@@ -167,6 +175,8 @@ void setup() {
     if (strlen(mqtt_username) > 0) {
         mqttClient.setCredentials(mqtt_username, mqtt_password);
     }
+    mqttClient.onMessage(mqttMessage);
+    mqttClient.onConnect(mqttConnect);
     mqttClient.connect();
 
     heatpump.setSettingsChangedCallback(heatpumpSettingsChanged);
