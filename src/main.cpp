@@ -168,8 +168,17 @@ void setup() {
         mqttClient.setCredentials(mqtt_username, mqtt_password);
     }
     mqttClient.connect();
+
+    heatpump.setSettingsChangedCallback(heatpumpSettingsChanged);
+    heatpump.setStatusChangedCallback(heatpumpStatusChanged);
+
+    #ifdef HEATPUMP_ENABLE
+    heatpump.connect(&Serial);
+    #endif
 }
 
 void loop() {
+    #ifdef HEATPUMP_ENABLE
     heatpump.sync();
+    #endif
 }
