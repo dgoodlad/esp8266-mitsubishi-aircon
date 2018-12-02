@@ -1,10 +1,11 @@
+#include <Arduino.h>
 #include <FS.h>
 
 #include <ESP8266WiFi.h>
 #include <ESPAsyncTCP.h>
 #include <AsyncMqttClient.h>
 
-// Even though we use the async 
+// WiFiManager requires the stock synchronous web server
 #include <ESP8266WebServer.h>
 #include <DNSServer.h>
 #include <WiFiManager.h>
@@ -16,6 +17,7 @@ char mqtt_port[6] = "8080";
 char mqtt_username[64];
 char mqtt_password[64];
 
+char config_ap_name[17];
 bool shouldSaveConfig = false;
 
 void saveConfigCallback () {
@@ -55,13 +57,14 @@ void setup() {
     WiFiManager wifiManager;
 
     wifiManager.setSaveConfigCallback(saveConfigCallback);
-    wifiManager.setSTAStaticIPConfig(IPAddress(10,0,1,99), IPAddress(10,0,1,1), IPAddress(255,255,255,0));
     wifiManager.addParameter(&custom_mqtt_host);
     wifiManager.addParameter(&custom_mqtt_port);
     wifiManager.addParameter(&custom_mqtt_username);
     wifiManager.addParameter(&custom_mqtt_password);
 
-    if (!wifiManager.autoConnect("ESP8266 Mitsubishi Aircon Setup", "aircon")) {
+    snprintf(config_ap_name, 17, "ESP8266 %08x", ESP.getChipId());
+
+    if (!wifiManager.autoConnect(config_ap_name, "aircon")) {
         delay(3000);
         ESP.reset();
         delay(5000);
