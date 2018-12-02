@@ -61,6 +61,20 @@ void heatpumpStatusChanged(heatpumpStatus status) {
     mqttClient.publish(mqtt_topic_current_temperature_state, 0, true, temperature);
 }
 
+void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
+    if(strcmp(topic, mqtt_topic_power_command)) {
+        heatpump.setPowerSetting(payload);
+    } else if(strcmp(topic, mqtt_topic_mode_command)) {
+        heatpump.setModeSetting(payload);
+    } else if(strcmp(topic, mqtt_topic_temperature_command)) {
+        heatpump.setTemperature(atof(payload));
+    } else if(strcmp(topic, mqtt_topic_fan_command)) {
+        heatpump.setFanSpeed(payload);
+    } else if(strcmp(topic, mqtt_topic_vane_command)) {
+        heatpump.setVaneSetting(payload);
+    }
+}
+
 void setup() {
     if (SPIFFS.begin()) {
         if (SPIFFS.exists("/config.json")) {
