@@ -22,6 +22,8 @@ char mqtt_password[64];
 char config_ap_name[17];
 bool shouldSaveConfig = false;
 
+AsyncMqttClient mqttClient;
+
 void saveConfigCallback () {
     shouldSaveConfig = true;
 }
@@ -95,6 +97,12 @@ void setup() {
         json.printTo(configFile);
         configFile.close();
     }
+
+    mqttClient.setServer(mqtt_host, atoi(mqtt_port));
+    if (strlen(mqtt_username) > 0) {
+        mqttClient.setCredentials(mqtt_username, mqtt_password);
+    }
+    mqttClient.connect();
 }
 
 void loop() {
