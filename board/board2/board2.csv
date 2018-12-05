@@ -1,0 +1,27 @@
+"Source:","/home/dgoodlad/src/esp8266-mitsubishi-aircon/board/board2/board2.sch"
+"Date:","Tue 04 Dec 2018 21:23:47 AEDT"
+"Tool:","Eeschema 5.0.0+dfsg1-2"
+"Generator:","/usr/share/kicad/plugins/bom_csv_grouped_by_value.py"
+"Component Count:","7"
+
+"Individual Components:"
+
+"Item","Qty","Reference(s)","Value","LibPart","Footprint","Datasheet"
+"","","C1","0.1uF","Device:C","Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"","","C2","0.1uF","Device:C","Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"","","J1","11-PIN HDR","Connector:Conn_01x11_Female","Connector_PinSocket_2.54mm:PinSocket_1x11_P2.54mm_Vertical","~"
+"","","J2","MITSU_AC","Connector:Conn_01x04_Male","Connector_JST:JST_PH_S4B-PH-K_1x04_P2.00mm_Horizontal","~"
+"","","J3","11-PIN HDR","Connector:Conn_01x11_Female","Connector_PinSocket_2.54mm:PinSocket_1x11_P2.54mm_Vertical","~"
+"","","R1","10K","Device:R","Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"","","U1","TXB0104D","Logic_LevelTranslator:TXB0104D","Package_SO:SOIC-14_3.9x8.7mm_P1.27mm","http://www.ti.com/lit/ds/symlink/txb0104.pdf"
+
+
+
+"Collated Components:"
+
+"Item","Qty","Reference(s)","Value","LibPart","Footprint","Datasheet"
+"1","2","C1, C2","0.1uF","Device:C","Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"2","2","J1, J3","11-PIN HDR","Connector:Conn_01x11_Female","Connector_PinSocket_2.54mm:PinSocket_1x11_P2.54mm_Vertical","~"
+"3","1","J2","MITSU_AC","Connector:Conn_01x04_Male","Connector_JST:JST_PH_S4B-PH-K_1x04_P2.00mm_Horizontal","~"
+"4","1","R1","10K","Device:R","Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"5","1","U1","TXB0104D","Logic_LevelTranslator:TXB0104D","Package_SO:SOIC-14_3.9x8.7mm_P1.27mm","http://www.ti.com/lit/ds/symlink/txb0104.pdf"

@@ -1,0 +1,690 @@
+EESchema Schematic File Version 4
+LIBS:board-cache
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "ESP8266 Mitsubishi AC interface"
+Date "2018-12-03"
+Rev "v01"
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 "https://github.com/dgoodlad"
+Comment4 "Author: David Goodlad"
+$EndDescr
+$Comp
+L dk_Logic-Translators-Level-Shifters:SN74LVC1T45DBVR U2
+U 1 1 5C05158B
+P 7950 2700
+F 0 "U2" H 7600 2950 60  0000 L CNN
+F 1 "SN74LVC1T45" H 7100 2850 60  0000 L CNN
+F 2 "digikey-footprints:SOT-23-6" H 8150 2900 60  0001 L CNN
+F 3 "http://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf" H 8150 3000 60  0001 L CNN
+F 4 "296-16843-1-ND" H 8150 3100 60  0001 L CNN "Digi-Key_PN"
+F 5 "SN74LVC1T45DBVR" H 8150 3200 60  0001 L CNN "MPN"
+F 6 "Integrated Circuits (ICs)" H 8150 3300 60  0001 L CNN "Category"
+F 7 "Logic - Translators, Level Shifters" H 8150 3400 60  0001 L CNN "Family"
+F 8 "http://www.ti.com/lit/ds/symlink/sn74lvc1t45.pdf" H 8150 3500 60  0001 L CNN "DK_Datasheet_Link"
+F 9 "/product-detail/en/texas-instruments/SN74LVC1T45DBVR/296-16843-1-ND/639459" H 8150 3600 60  0001 L CNN "DK_Detail_Page"
+F 10 "IC TRNSLTR BIDIRECTIONAL SOT23-6" H 8150 3700 60  0001 L CNN "Description"
+F 11 "Texas Instruments" H 8150 3800 60  0001 L CNN "Manufacturer"
+F 12 "Active" H 8150 3900 60  0001 L CNN "Status"
+	1    7950 2700
+	-1   0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR021
+U 1 1 5C05199D
+P 7850 3350
+F 0 "#PWR021" H 7850 3100 50  0001 C CNN
+F 1 "GND" H 7855 3177 50  0000 C CNN
+F 2 "" H 7850 3350 50  0001 C CNN
+F 3 "" H 7850 3350 50  0001 C CNN
+	1    7850 3350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7850 3100 7850 3200
+Wire Wire Line
+	8250 2900 8300 2900
+Wire Wire Line
+	8300 2900 8300 3200
+Wire Wire Line
+	8300 3200 7850 3200
+Connection ~ 7850 3200
+Wire Wire Line
+	7850 3200 7850 3350
+$Comp
+L power:+3V3 #PWR020
+U 1 1 5C051A71
+P 7850 2200
+F 0 "#PWR020" H 7850 2050 50  0001 C CNN
+F 1 "+3V3" H 7865 2373 50  0000 C CNN
+F 2 "" H 7850 2200 50  0001 C CNN
+F 3 "" H 7850 2200 50  0001 C CNN
+	1    7850 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR015
+U 1 1 5C051A8B
+P 5450 1950
+F 0 "#PWR015" H 5450 1800 50  0001 C CNN
+F 1 "+3V3" H 5465 2123 50  0000 C CNN
+F 2 "" H 5450 1950 50  0001 C CNN
+F 3 "" H 5450 1950 50  0001 C CNN
+	1    5450 1950
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR022
+U 1 1 5C051BA0
+P 8050 2200
+F 0 "#PWR022" H 8050 2050 50  0001 C CNN
+F 1 "+5V" H 8065 2373 50  0000 C CNN
+F 2 "" H 8050 2200 50  0001 C CNN
+F 3 "" H 8050 2200 50  0001 C CNN
+	1    8050 2200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7050 2700 7650 2700
+Wire Wire Line
+	8950 2700 8250 2700
+Text Label 7150 2700 0    50   ~ 0
+TX0*
+Wire Wire Line
+	7950 2300 7950 2250
+Wire Wire Line
+	7950 2250 8050 2250
+Wire Wire Line
+	8050 2250 8050 2200
+Wire Wire Line
+	7850 2300 7850 2200
+$Comp
+L dk_RF-Transceiver-Modules:2491 MOD1
+U 1 1 5C05703F
+P 5450 2700
+F 0 "MOD1" H 5800 2950 60  0000 C CNN
+F 1 "ESP12S" V 5350 2500 60  0000 C CNB
+F 2 "digikey-footprints:WIFI_Module_ESP8266_2491" H 5650 2900 60  0001 L CNN
+F 3 "https://www.adafruit.com/images/product-files/2471/0A-ESP8266__Datasheet__EN_v4.3.pdf" H 5650 3000 60  0001 L CNN
+F 4 "1528-1438-ND" H 5650 3100 60  0001 L CNN "Digi-Key_PN"
+F 5 "2491" H 5650 3200 60  0001 L CNN "MPN"
+F 6 "RF/IF and RFID" H 5650 3300 60  0001 L CNN "Category"
+F 7 "RF Transceiver Modules" H 5650 3400 60  0001 L CNN "Family"
+F 8 "https://www.adafruit.com/images/product-files/2471/0A-ESP8266__Datasheet__EN_v4.3.pdf" H 5650 3500 60  0001 L CNN "DK_Datasheet_Link"
+F 9 "/product-detail/en/adafruit-industries-llc/2491/1528-1438-ND/5761206" H 5650 3600 60  0001 L CNN "DK_Detail_Page"
+F 10 "ESP8266 SMT MODULE" H 5650 3700 60  0001 L CNN "Description"
+F 11 "Adafruit Industries LLC" H 5650 3800 60  0001 L CNN "Manufacturer"
+F 12 "Active" H 5650 3900 60  0001 L CNN "Status"
+	1    5450 2700
+	1    0    0    -1  
+$EndComp
+$Comp
+L dk_PMIC-Voltage-Regulators-Linear:AP2114H-3_3TRG1 U1
+U 1 1 5C057367
+P 2200 5150
+F 0 "U1" H 2150 5437 60  0000 C CNN
+F 1 "AP2114H" H 2150 5331 60  0000 C CNN
+F 2 "digikey-footprints:SOT-223" H 2400 5350 60  0001 L CNN
+F 3 "https://www.diodes.com/assets/Datasheets/AP2114.pdf" H 2400 5450 60  0001 L CNN
+F 4 "AP2114H-3.3TRG1DICT-ND" H 2400 5550 60  0001 L CNN "Digi-Key_PN"
+F 5 "AP2114H-3.3TRG1" H 2400 5650 60  0001 L CNN "MPN"
+F 6 "Integrated Circuits (ICs)" H 2400 5750 60  0001 L CNN "Category"
+F 7 "PMIC - Voltage Regulators - Linear" H 2400 5850 60  0001 L CNN "Family"
+F 8 "https://www.diodes.com/assets/Datasheets/AP2114.pdf" H 2400 5950 60  0001 L CNN "DK_Datasheet_Link"
+F 9 "/product-detail/en/diodes-incorporated/AP2114H-3.3TRG1/AP2114H-3.3TRG1DICT-ND/4505142" H 2400 6050 60  0001 L CNN "DK_Detail_Page"
+F 10 "IC REG LINEAR 3.3V 1A SOT223" H 2400 6150 60  0001 L CNN "Description"
+F 11 "Diodes Incorporated" H 2400 6250 60  0001 L CNN "Manufacturer"
+F 12 "Active" H 2400 6350 60  0001 L CNN "Status"
+	1    2200 5150
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR05
+U 1 1 5C0574D4
+P 2100 5750
+F 0 "#PWR05" H 2100 5500 50  0001 C CNN
+F 1 "GND" H 2105 5577 50  0000 C CNN
+F 2 "" H 2100 5750 50  0001 C CNN
+F 3 "" H 2100 5750 50  0001 C CNN
+	1    2100 5750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2100 5650 2100 5750
+$Comp
+L power:+3V3 #PWR08
+U 1 1 5C0579C4
+P 2850 5050
+F 0 "#PWR08" H 2850 4900 50  0001 C CNN
+F 1 "+3V3" H 2865 5223 50  0000 C CNN
+F 2 "" H 2850 5050 50  0001 C CNN
+F 3 "" H 2850 5050 50  0001 C CNN
+	1    2850 5050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2600 5150 2850 5150
+$Comp
+L dk_Diodes-Rectifiers-Single:1N5817 D1
+U 1 1 5C0584C1
+P 1200 4900
+F 0 "D1" V 1147 4978 60  0000 L CNN
+F 1 "1N5817" V 1253 4978 60  0000 L CNN
+F 2 "digikey-footprints:DO-41" H 1400 5100 60  0001 L CNN
+F 3 "https://www.fairchildsemi.com/datasheets/1N/1N5817.pdf" H 1400 5200 60  0001 L CNN
+F 4 "1N5817FSCT-ND" H 1400 5300 60  0001 L CNN "Digi-Key_PN"
+F 5 "1N5817" H 1400 5400 60  0001 L CNN "MPN"
+F 6 "Discrete Semiconductor Products" H 1400 5500 60  0001 L CNN "Category"
+F 7 "Diodes - Rectifiers - Single" H 1400 5600 60  0001 L CNN "Family"
+F 8 "https://www.fairchildsemi.com/datasheets/1N/1N5817.pdf" H 1400 5700 60  0001 L CNN "DK_Datasheet_Link"
+F 9 "/product-detail/en/on-semiconductor/1N5817/1N5817FSCT-ND/1532776" H 1400 5800 60  0001 L CNN "DK_Detail_Page"
+F 10 "DIODE SCHOTTKY 20V 1A DO41" H 1400 5900 60  0001 L CNN "Description"
+F 11 "ON Semiconductor" H 1400 6000 60  0001 L CNN "Manufacturer"
+F 12 "Active" H 1400 6100 60  0001 L CNN "Status"
+	1    1200 4900
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:C C1
+U 1 1 5C0592B8
+P 1200 5400
+F 0 "C1" H 1315 5446 50  0000 L CNN
+F 1 "4.7uF" H 1315 5355 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 1238 5250 50  0001 C CNN
+F 3 "~" H 1200 5400 50  0001 C CNN
+	1    1200 5400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1200 5100 1200 5150
+Wire Wire Line
+	1200 5150 1700 5150
+Wire Wire Line
+	1200 5250 1200 5150
+Connection ~ 1200 5150
+$Comp
+L Device:C C2
+U 1 1 5C059A1E
+P 2850 5350
+F 0 "C2" H 2965 5396 50  0000 L CNN
+F 1 "4.7uF" H 2965 5305 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 2888 5200 50  0001 C CNN
+F 3 "~" H 2850 5350 50  0001 C CNN
+	1    2850 5350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR012
+U 1 1 5C059A8F
+P 2850 5800
+F 0 "#PWR012" H 2850 5550 50  0001 C CNN
+F 1 "GND" H 2855 5627 50  0000 C CNN
+F 2 "" H 2850 5800 50  0001 C CNN
+F 3 "" H 2850 5800 50  0001 C CNN
+	1    2850 5800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2850 5200 2850 5150
+Wire Wire Line
+	2850 5500 2850 5800
+$Comp
+L power:GND #PWR02
+U 1 1 5C05A91B
+P 1200 5750
+F 0 "#PWR02" H 1200 5500 50  0001 C CNN
+F 1 "GND" H 1205 5577 50  0000 C CNN
+F 2 "" H 1200 5750 50  0001 C CNN
+F 3 "" H 1200 5750 50  0001 C CNN
+	1    1200 5750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1200 5550 1200 5750
+$Comp
+L Device:LED D2
+U 1 1 5C05BAFF
+P 1250 1800
+F 0 "D2" V 1288 1683 50  0000 R CNN
+F 1 "LED" V 1197 1683 50  0000 R CNN
+F 2 "LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 1250 1800 50  0001 C CNN
+F 3 "~" H 1250 1800 50  0001 C CNN
+	1    1250 1800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:+3V3 #PWR03
+U 1 1 5C05C7EE
+P 1250 1500
+F 0 "#PWR03" H 1250 1350 50  0001 C CNN
+F 1 "+3V3" H 1265 1673 50  0000 C CNN
+F 2 "" H 1250 1500 50  0001 C CNN
+F 3 "" H 1250 1500 50  0001 C CNN
+	1    1250 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R1
+U 1 1 5C05C836
+P 1250 2200
+F 0 "R1" H 1320 2246 50  0000 L CNN
+F 1 "1K" H 1320 2155 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 1180 2200 50  0001 C CNN
+F 3 "~" H 1250 2200 50  0001 C CNN
+	1    1250 2200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1250 2050 1250 1950
+Wire Wire Line
+	1250 1650 1250 1500
+Wire Wire Line
+	1250 2350 1250 2800
+Text Label 1250 2800 1    50   ~ 0
+GPIO0
+Wire Wire Line
+	4500 2900 4950 2900
+Text Label 4500 2900 0    50   ~ 0
+GPIO0
+Wire Wire Line
+	5450 2300 5450 1950
+$Comp
+L power:GND #PWR04
+U 1 1 5C05F426
+P 1800 2800
+F 0 "#PWR04" H 1800 2550 50  0001 C CNN
+F 1 "GND" H 1805 2627 50  0000 C CNN
+F 2 "" H 1800 2800 50  0001 C CNN
+F 3 "" H 1800 2800 50  0001 C CNN
+	1    1800 2800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1800 2300 1800 1900
+Text Label 1800 2150 1    50   ~ 0
+GPIO0
+$Comp
+L power:GND #PWR07
+U 1 1 5C0601A0
+P 2250 2800
+F 0 "#PWR07" H 2250 2550 50  0001 C CNN
+F 1 "GND" H 2255 2627 50  0000 C CNN
+F 2 "" H 2250 2800 50  0001 C CNN
+F 3 "" H 2250 2800 50  0001 C CNN
+	1    2250 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R2
+U 1 1 5C0608D1
+P 2250 1700
+F 0 "R2" H 2320 1746 50  0000 L CNN
+F 1 "10K" H 2320 1655 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 2180 1700 50  0001 C CNN
+F 3 "~" H 2250 1700 50  0001 C CNN
+	1    2250 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR06
+U 1 1 5C060939
+P 2250 1500
+F 0 "#PWR06" H 2250 1350 50  0001 C CNN
+F 1 "+3V3" H 2265 1673 50  0000 C CNN
+F 2 "" H 2250 1500 50  0001 C CNN
+F 3 "" H 2250 1500 50  0001 C CNN
+	1    2250 1500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2250 1550 2250 1500
+Wire Wire Line
+	2250 1850 2250 2300
+Text Label 2250 2150 1    50   ~ 0
+RESET
+$Comp
+L dk_Pushbutton-Switches:GPTS203211B SW1
+U 1 1 5C05BDAF
+P 1800 2500
+F 0 "SW1" V 1800 2460 50  0000 R CNN
+F 1 "GPTS203211B" V 1755 2459 50  0001 R CNN
+F 2 "digikey-footprints:PushButton_12x12mm_THT_GPTS203211B" H 2000 2700 50  0001 L CNN
+F 3 "http://switches-connectors-custom.cwind.com/Asset/GPTS203211BR2.pdf" H 2000 2800 60  0001 L CNN
+F 4 "CW181-ND" H 2000 2900 60  0001 L CNN "Digi-Key_PN"
+F 5 "GPTS203211B" H 2000 3000 60  0001 L CNN "MPN"
+F 6 "Switches" H 2000 3100 60  0001 L CNN "Category"
+F 7 "Pushbutton Switches" H 2000 3200 60  0001 L CNN "Family"
+F 8 "http://switches-connectors-custom.cwind.com/Asset/GPTS203211BR2.pdf" H 2000 3300 60  0001 L CNN "DK_Datasheet_Link"
+F 9 "/product-detail/en/cw-industries/GPTS203211B/CW181-ND/3190590" H 2000 3400 60  0001 L CNN "DK_Detail_Page"
+F 10 "SWITCH PUSHBUTTON SPST 1A 30V" H 2000 3500 60  0001 L CNN "Description"
+F 11 "CW Industries" H 2000 3600 60  0001 L CNN "Manufacturer"
+F 12 "Active" H 2000 3700 60  0001 L CNN "Status"
+	1    1800 2500
+	0    -1   -1   0   
+$EndComp
+$Comp
+L dk_Pushbutton-Switches:GPTS203211B SW2
+U 1 1 5C05E246
+P 2250 2500
+F 0 "SW2" V 2250 2460 50  0000 R CNN
+F 1 "GPTS203211B" V 2205 2459 50  0001 R CNN
+F 2 "digikey-footprints:PushButton_12x12mm_THT_GPTS203211B" H 2450 2700 50  0001 L CNN
+F 3 "http://switches-connectors-custom.cwind.com/Asset/GPTS203211BR2.pdf" H 2450 2800 60  0001 L CNN
+F 4 "CW181-ND" H 2450 2900 60  0001 L CNN "Digi-Key_PN"
+F 5 "GPTS203211B" H 2450 3000 60  0001 L CNN "MPN"
+F 6 "Switches" H 2450 3100 60  0001 L CNN "Category"
+F 7 "Pushbutton Switches" H 2450 3200 60  0001 L CNN "Family"
+F 8 "http://switches-connectors-custom.cwind.com/Asset/GPTS203211BR2.pdf" H 2450 3300 60  0001 L CNN "DK_Datasheet_Link"
+F 9 "/product-detail/en/cw-industries/GPTS203211B/CW181-ND/3190590" H 2450 3400 60  0001 L CNN "DK_Detail_Page"
+F 10 "SWITCH PUSHBUTTON SPST 1A 30V" H 2450 3500 60  0001 L CNN "Description"
+F 11 "CW Industries" H 2450 3600 60  0001 L CNN "Manufacturer"
+F 12 "Active" H 2450 3700 60  0001 L CNN "Status"
+	1    2250 2500
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	2250 2700 2250 2800
+Wire Wire Line
+	1800 2700 1800 2800
+$Comp
+L Device:R R3
+U 1 1 5C05FCA8
+P 2900 2200
+F 0 "R3" H 2970 2246 50  0000 L CNN
+F 1 "10K" H 2970 2155 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 2830 2200 50  0001 C CNN
+F 3 "~" H 2900 2200 50  0001 C CNN
+	1    2900 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R4
+U 1 1 5C05FF88
+P 3200 2200
+F 0 "R4" H 3270 2246 50  0000 L CNN
+F 1 "10K" H 3270 2155 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 3130 2200 50  0001 C CNN
+F 3 "~" H 3200 2200 50  0001 C CNN
+	1    3200 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R5
+U 1 1 5C05FFBC
+P 3500 2200
+F 0 "R5" H 3570 2246 50  0000 L CNN
+F 1 "10K" H 3570 2155 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 3430 2200 50  0001 C CNN
+F 3 "~" H 3500 2200 50  0001 C CNN
+	1    3500 2200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 2350 2900 2800
+Wire Wire Line
+	3200 2350 3200 2800
+Wire Wire Line
+	3500 2350 3500 2800
+$Comp
+L power:GND #PWR013
+U 1 1 5C061F29
+P 3500 2800
+F 0 "#PWR013" H 3500 2550 50  0001 C CNN
+F 1 "GND" H 3505 2627 50  0000 C CNN
+F 2 "" H 3500 2800 50  0001 C CNN
+F 3 "" H 3500 2800 50  0001 C CNN
+	1    3500 2800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3500 2050 3500 1400
+$Comp
+L power:+3V3 #PWR010
+U 1 1 5C062B93
+P 3200 1500
+F 0 "#PWR010" H 3200 1350 50  0001 C CNN
+F 1 "+3V3" H 3215 1673 50  0000 C CNN
+F 2 "" H 3200 1500 50  0001 C CNN
+F 3 "" H 3200 1500 50  0001 C CNN
+	1    3200 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR09
+U 1 1 5C062BBC
+P 2900 1500
+F 0 "#PWR09" H 2900 1350 50  0001 C CNN
+F 1 "+3V3" H 2915 1673 50  0000 C CNN
+F 2 "" H 2900 1500 50  0001 C CNN
+F 3 "" H 2900 1500 50  0001 C CNN
+	1    2900 1500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 2050 2900 1500
+Wire Wire Line
+	3200 2050 3200 1500
+Text Label 2900 2800 1    50   ~ 0
+GPIO2
+Text Label 3200 2800 1    50   ~ 0
+CH_PD
+Text Label 3500 1900 1    50   ~ 0
+GPIO15
+Wire Wire Line
+	5750 3000 6700 3000
+Text Label 6050 3000 0    50   ~ 0
+GPIO15
+Wire Wire Line
+	4950 2500 4500 2500
+Text Label 4500 2500 0    50   ~ 0
+RESET
+Wire Wire Line
+	4950 2700 4500 2700
+Text Label 4500 2700 0    50   ~ 0
+CH_PD
+$Comp
+L power:GND #PWR016
+U 1 1 5C068FD0
+P 5450 3750
+F 0 "#PWR016" H 5450 3500 50  0001 C CNN
+F 1 "GND" H 5455 3577 50  0000 C CNN
+F 2 "" H 5450 3750 50  0001 C CNN
+F 3 "" H 5450 3750 50  0001 C CNN
+	1    5450 3750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5450 3600 5450 3750
+Wire Wire Line
+	5750 3200 6700 3200
+Text Label 6050 3200 0    50   ~ 0
+GPIO13
+$Comp
+L power:+5V #PWR01
+U 1 1 5C06D71A
+P 1200 4600
+F 0 "#PWR01" H 1200 4450 50  0001 C CNN
+F 1 "+5V" H 1215 4773 50  0000 C CNN
+F 2 "" H 1200 4600 50  0001 C CNN
+F 3 "" H 1200 4600 50  0001 C CNN
+	1    1200 4600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1200 4700 1200 4600
+$Comp
+L Connector:Conn_01x06_Male JP1
+U 1 1 5C072C05
+P 5150 5250
+F 0 "JP1" V 5210 4862 50  0000 R CNN
+F 1 "FTDI" V 5301 4862 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 5150 5250 50  0001 C CNN
+F 3 "~" H 5150 5250 50  0001 C CNN
+	1    5150 5250
+	0    -1   1    0   
+$EndComp
+Wire Wire Line
+	5050 5450 5050 5850
+Wire Wire Line
+	5150 5450 5150 5850
+$Comp
+L power:+5V #PWR014
+U 1 1 5C07686E
+P 5250 5850
+F 0 "#PWR014" H 5250 5700 50  0001 C CNN
+F 1 "+5V" H 5265 6023 50  0000 C CNN
+F 2 "" H 5250 5850 50  0001 C CNN
+F 3 "" H 5250 5850 50  0001 C CNN
+	1    5250 5850
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR017
+U 1 1 5C07691F
+P 5450 5850
+F 0 "#PWR017" H 5450 5600 50  0001 C CNN
+F 1 "GND" H 5455 5677 50  0000 C CNN
+F 2 "" H 5450 5850 50  0001 C CNN
+F 3 "" H 5450 5850 50  0001 C CNN
+	1    5450 5850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5450 5450 5450 5850
+Wire Wire Line
+	5250 5450 5250 5850
+Text Label 5050 5850 1    50   ~ 0
+TX0
+Text Label 5150 5850 1    50   ~ 0
+RX0_5V
+$Comp
+L Diode:1N4148 D3
+U 1 1 5C079014
+P 2250 3600
+F 0 "D3" H 2250 3816 50  0000 C CNN
+F 1 "1N4148" H 2250 3725 50  0000 C CNN
+F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 2250 3425 50  0001 C CNN
+F 3 "http://www.nxp.com/documents/data_sheet/1N4148_1N4448.pdf" H 2250 3600 50  0001 C CNN
+	1    2250 3600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Diode:1N4148 D4
+U 1 1 5C0790A0
+P 2250 3950
+F 0 "D4" H 2250 4166 50  0000 C CNN
+F 1 "1N4148" H 2250 4075 50  0000 C CNN
+F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 2250 3775 50  0001 C CNN
+F 3 "http://www.nxp.com/documents/data_sheet/1N4148_1N4448.pdf" H 2250 3950 50  0001 C CNN
+	1    2250 3950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2400 3600 2900 3600
+Wire Wire Line
+	2400 3950 2900 3950
+Wire Wire Line
+	2100 3600 1550 3600
+Wire Wire Line
+	2100 3950 1550 3950
+Text Label 1550 3600 0    50   ~ 0
+RESET_5V
+Text Label 1550 3950 0    50   ~ 0
+RX0_5V
+Text Label 2550 3600 0    50   ~ 0
+RESET
+Text Label 2550 3950 0    50   ~ 0
+RX0
+Wire Wire Line
+	5750 2700 6300 2700
+Wire Wire Line
+	5750 2800 6300 2800
+Text Label 6050 2700 0    50   ~ 0
+RX0
+Text Label 6050 2800 0    50   ~ 0
+TX0
+$Comp
+L Connector:Conn_01x04_Male JP2
+U 1 1 5C087E09
+P 6450 5250
+F 0 "JP2" V 6510 4963 50  0000 R CNN
+F 1 "MITSU AC" V 6601 4963 50  0000 R CNN
+F 2 "Connector_JST:JST_PH_S4B-PH-K_1x04_P2.00mm_Horizontal" H 6450 5250 50  0001 C CNN
+F 3 "~" H 6450 5250 50  0001 C CNN
+	1    6450 5250
+	0    -1   1    0   
+$EndComp
+$Comp
+L power:+5V #PWR018
+U 1 1 5C0881F3
+P 6550 5850
+F 0 "#PWR018" H 6550 5700 50  0001 C CNN
+F 1 "+5V" H 6565 6023 50  0000 C CNN
+F 2 "" H 6550 5850 50  0001 C CNN
+F 3 "" H 6550 5850 50  0001 C CNN
+	1    6550 5850
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR019
+U 1 1 5C0882B3
+P 6650 5850
+F 0 "#PWR019" H 6650 5600 50  0001 C CNN
+F 1 "GND" H 6655 5677 50  0000 C CNN
+F 2 "" H 6650 5850 50  0001 C CNN
+F 3 "" H 6650 5850 50  0001 C CNN
+	1    6650 5850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6550 5450 6550 5850
+Wire Wire Line
+	6650 5450 6650 5850
+Wire Wire Line
+	6450 5450 6450 5850
+Wire Wire Line
+	6350 5450 6350 5850
+Text Label 6550 3000 0    50   ~ 0
+TX0*
+Text Label 6550 3200 0    50   ~ 0
+RX0*
+Wire Wire Line
+	4950 2800 4150 2800
+Text Label 4150 2800 0    50   ~ 0
+TX1
+Text Label 8650 2700 0    50   ~ 0
+TX0*_5V
+Text Label 6350 5850 1    50   ~ 0
+TX0*_5V
+$Comp
+L Diode:1N4148 D5
+U 1 1 5C0945D9
+P 2250 4300
+F 0 "D5" H 2250 4516 50  0000 C CNN
+F 1 "1N4148" H 2250 4425 50  0000 C CNN
+F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 2250 4125 50  0001 C CNN
+F 3 "http://www.nxp.com/documents/data_sheet/1N4148_1N4448.pdf" H 2250 4300 50  0001 C CNN
+	1    2250 4300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2400 4300 2900 4300
+Wire Wire Line
+	2100 4300 1550 4300
+Text Label 1550 4300 0    50   ~ 0
+RX0*_5V
+Text Label 2550 4300 0    50   ~ 0
+RX0*
+Text Label 6450 5850 1    50   ~ 0
+RX0*_5V
+Connection ~ 2850 5150
+Wire Wire Line
+	2850 5050 2850 5150
+Text Label 4500 2800 0    50   ~ 0
+GPIO2
+$EndSCHEMATC
