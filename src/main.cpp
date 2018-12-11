@@ -1,4 +1,4 @@
-#include "main.h"
+#include "main.hpp"
 
 #include <Arduino.h>
 #include <FS.h>
@@ -12,8 +12,6 @@
 #include <ArduinoJson.h>
 
 #include <HeatPump.h>
-
-#define WIFI_MANAGER_TRIGGER_PIN 0
 
 bool shouldSaveConfig = false;
 
@@ -29,16 +27,22 @@ void heatpumpSettingsChanged() {
     char temperature[4];
     heatpumpSettings settings = heatpump.getSettings();
     snprintf(temperature, 4, "%3.0f", settings.temperature);
+    Serial.printf("PUB power state %s\n", settings.power.c_str());
     mqttClient.publish(mqtt_topic_power_state, 0, true, settings.power.c_str());
+    Serial.printf("PUB mode state %s\n", settings.mode.c_str());
     mqttClient.publish(mqtt_topic_mode_state, 0, true, settings.mode.c_str());
+    Serial.printf("PUB temperature %s\n", temperature);
     mqttClient.publish(mqtt_topic_temperature_state, 0, true, temperature);
+    Serial.printf("PUB fan state %s\n", settings.fan.c_str());
     mqttClient.publish(mqtt_topic_fan_state, 0, true, settings.fan.c_str());
+    Serial.printf("PUB vane state %s\n", settings.vane.c_str());
     mqttClient.publish(mqtt_topic_vane_state, 0, true, settings.vane.c_str());
 }
 
 void heatpumpStatusChanged(heatpumpStatus status) {
     char temperature[4];
     snprintf(temperature, 4, "%3.0f", status.roomTemperature);
+    Serial.printf("PUB temperature %s\n", temperature);
     mqttClient.publish(mqtt_topic_current_temperature_state, 0, true, temperature);
 }
 
@@ -52,16 +56,25 @@ void mqttConnect(bool sessionPresent) {
 
 void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
     if(strcmp(topic, mqtt_topic_power_command)) {
+        Serial.printf("SET power setting to %s\n", payload);
         heatpump.setPowerSetting(payload);
     } else if(strcmp(topic, mqtt_topic_mode_command)) {
+        Serial.printf("SET mode setting to %s\n", payload);
         heatpump.setModeSetting(payload);
     } else if(strcmp(topic, mqtt_topic_temperature_command)) {
+        Serial.printf("SET temperature to %f\n", atof(payload));
         heatpump.setTemperature(atof(payload));
     } else if(strcmp(topic, mqtt_topic_fan_command)) {
+        Serial.printf("SET fan speed to %s\n", payload);
         heatpump.setFanSpeed(payload);
     } else if(strcmp(topic, mqtt_topic_vane_command)) {
+        Serial.printf("SET vane to %s\n", payload);
         heatpump.setVaneSetting(payload);
     }
+}
+
+void setupButtonHandler() {
+    button.attach(BUTTON_PIN, BUTTON_MODE);
 }
 
 void loadConfig() {
@@ -140,14 +153,25 @@ void saveConfig() {
     configFile.close();
 }
 
+void handleButton() {
+    button.update();
+    if (button.read() == LOW && button.duration() > 3000) {
+        Serial.println("Resetting to factory settings");
+        wifiManager->resetSettings();
+        SPIFFS.remove(CONFIG_SPIFFS_PATH);
+        Serial.println("Restarting...");
+        ESP.restart();
+        delay(5000);
+    }
+}
+
 void setup() {
     Serial.begin(115200);
     Serial.setDebugOutput(true);
     delay(3000);
     Serial.println("\n Starting up...");
 
-    pinMode(WIFI_MANAGER_TRIGGER_PIN, INPUT);
-
+    setupButtonHandler();
     loadConfig();
     setupWifiManager();
 
@@ -205,4 +229,6 @@ void loop() {
     #ifdef HEATPUMP_ENABLE
     heatpump.sync();
     #endif
+
+    handleButton();
 }

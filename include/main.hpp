@@ -1,9 +1,10 @@
-#ifndef __MAIN_H_
-#define __MAIN_H_
+#ifndef __MAIN_HPP_
+#define __MAIN_HPP_
 
 #define CONFIG_SPIFFS_PATH "/config.json"
 
 #include <WiFiManager.h>
+#include <Bounce2.h>
 
 #ifndef WIFIMANAGER_AP_PASSWORD
 #define WIFIMANAGER_AP_PASSWORD "espaircon"
@@ -45,9 +46,18 @@ char mqtt_topic_temperature_command[128];
 char mqtt_topic_fan_command[128];
 char mqtt_topic_vane_command[128];
 
+#define BUTTON_PIN 0
+#define BUTTON_MODE INPUT
+Bounce button;
+bool shouldStartConfigAP = false;
+bool shouldResetSettings = false;
+
+void setupButtonHander();
 void loadConfig();
 void setupWifiManager();
 bool startWifiManager();
 void saveConfig();
 
-#endif // __MAIN_H_
+void handleButton();
+
+#endif // __MAIN_HPP_
