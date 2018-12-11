@@ -1,3 +1,5 @@
+#include "main.h"
+
 #include <Arduino.h>
 #include <FS.h>
 
@@ -5,35 +7,14 @@
 #include <ESPAsyncTCP.h>
 #include <AsyncMqttClient.h>
 
-// WiFiManager requires the stock synchronous web server
-#include <ESP8266WebServer.h>
-#include <DNSServer.h>
 #include <WiFiManager.h>
 
 #include <ArduinoJson.h>
 
 #include <HeatPump.h>
 
-char mqtt_host[255];
-char mqtt_port[6] = "8080";
-char mqtt_username[64];
-char mqtt_password[64];
-char mqtt_topic_prefix[128];
+#define WIFI_MANAGER_TRIGGER_PIN 0
 
-char mqtt_topic_power_state[128];
-char mqtt_topic_mode_state[128];
-char mqtt_topic_temperature_state[128];
-char mqtt_topic_fan_state[128];
-char mqtt_topic_vane_state[128];
-char mqtt_topic_current_temperature_state[128];
-
-char mqtt_topic_power_command[128];
-char mqtt_topic_mode_command[128];
-char mqtt_topic_temperature_command[128];
-char mqtt_topic_fan_command[128];
-char mqtt_topic_vane_command[128];
-
-char config_ap_name[17];
 bool shouldSaveConfig = false;
 
 AsyncMqttClient mqttClient;
@@ -83,10 +64,11 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
     }
 }
 
-void setup() {
+void loadConfig() {
     if (SPIFFS.begin()) {
-        if (SPIFFS.exists("/config.json")) {
-            File configFile = SPIFFS.open("/config.json", "r");
+        if (SPIFFS.exists(CONFIG_SPIFFS_PATH)) {
+            Serial.printf("Found config at %s", CONFIG_SPIFFS_PATH);
+            File configFile = SPIFFS.open(CONFIG_SPIFFS_PATH, "r");
             if (configFile) {
                 size_t size = configFile.size();
                 std::unique_ptr<char[]> buf(new char[size]);
@@ -94,11 +76,11 @@ void setup() {
                 DynamicJsonBuffer jsonBuffer;
                 JsonObject& json = jsonBuffer.parseObject(buf.get());
                 if (json.success()) {
-                    strncpy(mqtt_host, json["mqtt_host"], 255);
-                    strncpy(mqtt_port, json["mqtt_port"], 6);
-                    strncpy(mqtt_username, json["mqtt_username"], 64);
-                    strncpy(mqtt_password, json["mqtt_password"], 64);
-                    strncpy(mqtt_topic_prefix, json["mqtt_topic_prefix"], 128);
+                    strncpy(settings.mqtt_host, json["mqtt_host"], MAX_LENGTH_MQTT_HOST);
+                    strncpy(settings.mqtt_port, json["mqtt_port"], MAX_LENGTH_MQTT_PORT);
+                    strncpy(settings.mqtt_username, json["mqtt_username"], MAX_LENGTH_MQTT_USERNAME);
+                    strncpy(settings.mqtt_password, json["mqtt_password"], MAX_LENGTH_MQTT_PASSWORD);
+                    strncpy(settings.mqtt_topic_prefix, json["mqtt_topic_prefix"], MAX_LENGTH_MQTT_TOPIC_PREFIX);
                 } else {
                     // Failed to load json config
                 }
@@ -107,73 +89,105 @@ void setup() {
         }
     } else {
         // Failed to mount FS
+        Serial.printf("Error mounting SPIFFS");
+    }
+}
+
+void setupWifiManager() {
+    custom_mqtt_host = new WiFiManagerParameter("mqtt_host", "MQTT Host", settings.mqtt_host, MAX_LENGTH_MQTT_HOST);
+    custom_mqtt_port = new WiFiManagerParameter("mqtt_port", "MQTT Port", settings.mqtt_port, MAX_LENGTH_MQTT_PORT);
+    custom_mqtt_username = new WiFiManagerParameter("mqtt_username", "MQTT Username", settings.mqtt_username, MAX_LENGTH_MQTT_USERNAME);
+    custom_mqtt_password = new WiFiManagerParameter("mqtt_password", "MQTT Password", settings.mqtt_password, MAX_LENGTH_MQTT_PASSWORD);
+    custom_mqtt_topic_prefix = new WiFiManagerParameter("mqtt_topic_prefis", "MQTT Topic Prefix", settings.mqtt_topic_prefix, MAX_LENGTH_MQTT_TOPIC_PREFIX);
+
+    wifiManager = new WiFiManager();
+
+    wifiManager->setSaveConfigCallback(saveConfigCallback);
+    wifiManager->addParameter(custom_mqtt_host);
+    wifiManager->addParameter(custom_mqtt_port);
+    wifiManager->addParameter(custom_mqtt_username);
+    wifiManager->addParameter(custom_mqtt_password);
+    wifiManager->addParameter(custom_mqtt_topic_prefix);
+
+    // Dark theme
+    wifiManager->setClass("invert");
+}
+
+bool startWifiManager() {
+    char config_ap_name[17];
+    snprintf(config_ap_name, 17, "ESP8266 %08x", ESP.getChipId());
+    Serial.printf("Starting wifimanager with AP %s", config_ap_name);
+
+    return wifiManager->autoConnect(config_ap_name, WIFIMANAGER_AP_PASSWORD);
+}
+
+void saveConfig() {
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject& json = jsonBuffer.createObject();
+    json["mqtt_host"] = settings.mqtt_host;
+    json["mqtt_port"] = settings.mqtt_port;
+    json["mqtt_username"] = settings.mqtt_username;
+    json["mqtt_password"] = settings.mqtt_password;
+    json["mqtt_topic_prefix"] = settings.mqtt_topic_prefix;
+
+    File configFile = SPIFFS.open(CONFIG_SPIFFS_PATH, "w");
+    if (!configFile) {
+        // Failed to open config file
     }
 
-    WiFiManagerParameter custom_mqtt_host("mqtt_host", "MQTT Host", mqtt_host, 255);
-    WiFiManagerParameter custom_mqtt_port("mqtt_port", "MQTT Port", mqtt_port, 6);
-    WiFiManagerParameter custom_mqtt_username("mqtt_username", "MQTT Username", mqtt_username, 255);
-    WiFiManagerParameter custom_mqtt_password("mqtt_password", "MQTT Password", mqtt_password, 255);
-    WiFiManagerParameter custom_mqtt_topic_prefix("mqtt_topic_prefis", "MQTT Topic Prefix", mqtt_topic_prefix, 128);
+    json.printTo(configFile);
+    json.printTo(Serial);
+    configFile.close();
+}
 
-    WiFiManager wifiManager;
+void setup() {
+    Serial.begin(115200);
+    Serial.setDebugOutput(true);
+    delay(3000);
+    Serial.println("\n Starting up...");
 
-    wifiManager.setSaveConfigCallback(saveConfigCallback);
-    wifiManager.addParameter(&custom_mqtt_host);
-    wifiManager.addParameter(&custom_mqtt_port);
-    wifiManager.addParameter(&custom_mqtt_username);
-    wifiManager.addParameter(&custom_mqtt_password);
-    wifiManager.addParameter(&custom_mqtt_topic_prefix);
+    pinMode(WIFI_MANAGER_TRIGGER_PIN, INPUT);
 
-    snprintf(config_ap_name, 17, "ESP8266 %08x", ESP.getChipId());
+    loadConfig();
+    setupWifiManager();
 
-    if (!wifiManager.autoConnect(config_ap_name, "aircon")) {
+    if (!startWifiManager()) {
+        Serial.println("Failed to connect or timed out");
         delay(3000);
-        ESP.reset();
+        ESP.restart();
         delay(5000);
+    } else {
+        Serial.println("Connected to wifi");
     }
 
     // Successfully connected to wifi
 
-    strncpy(mqtt_host, custom_mqtt_host.getValue(), 255);
-    strncpy(mqtt_port, custom_mqtt_port.getValue(), 6);
-    strncpy(mqtt_username, custom_mqtt_username.getValue(), 64);
-    strncpy(mqtt_password, custom_mqtt_password.getValue(), 64);
-    strncpy(mqtt_topic_prefix, custom_mqtt_topic_prefix.getValue(), 128);
+    strncpy(settings.mqtt_host, custom_mqtt_host->getValue(), MAX_LENGTH_MQTT_HOST);
+    strncpy(settings.mqtt_port, custom_mqtt_port->getValue(), MAX_LENGTH_MQTT_PORT);
+    strncpy(settings.mqtt_username, custom_mqtt_username->getValue(), MAX_LENGTH_MQTT_USERNAME);
+    strncpy(settings.mqtt_password, custom_mqtt_password->getValue(), MAX_LENGTH_MQTT_PASSWORD);
+    strncpy(settings.mqtt_topic_prefix, custom_mqtt_topic_prefix->getValue(), MAX_LENGTH_MQTT_TOPIC_PREFIX);
 
     if (shouldSaveConfig) {
-        DynamicJsonBuffer jsonBuffer;
-        JsonObject& json = jsonBuffer.createObject();
-        json["mqtt_host"] = mqtt_host;
-        json["mqtt_port"] = mqtt_port;
-        json["mqtt_username"] = mqtt_username;
-        json["mqtt_password"] = mqtt_password;
-        json["mqtt_topic_prefix"] = mqtt_topic_prefix;
-
-        File configFile = SPIFFS.open("/config.json", "w");
-        if (!configFile) {
-            // Failed to open config file
-        }
-
-        json.printTo(configFile);
-        configFile.close();
+        saveConfig();
     }
 
-    snprintf(mqtt_topic_power_state, 128, "%s/power/state", mqtt_topic_prefix);
-    snprintf(mqtt_topic_mode_state, 128, "%s/mode/state", mqtt_topic_prefix);
-    snprintf(mqtt_topic_temperature_state, 128, "%s/temperature/state", mqtt_topic_prefix);
-    snprintf(mqtt_topic_fan_state, 128, "%s/fan/state", mqtt_topic_prefix);
-    snprintf(mqtt_topic_vane_state, 128, "%s/vane/state", mqtt_topic_prefix);
-    snprintf(mqtt_topic_current_temperature_state, 128, "%s/current_temperature/state", mqtt_topic_prefix);
+    snprintf(mqtt_topic_power_state, 128, "%s/power/state", settings.mqtt_topic_prefix);
+    snprintf(mqtt_topic_mode_state, 128, "%s/mode/state", settings.mqtt_topic_prefix);
+    snprintf(mqtt_topic_temperature_state, 128, "%s/temperature/state", settings.mqtt_topic_prefix);
+    snprintf(mqtt_topic_fan_state, 128, "%s/fan/state", settings.mqtt_topic_prefix);
+    snprintf(mqtt_topic_vane_state, 128, "%s/vane/state", settings.mqtt_topic_prefix);
+    snprintf(mqtt_topic_current_temperature_state, 128, "%s/current_temperature/state", settings.mqtt_topic_prefix);
 
-    snprintf(mqtt_topic_power_command, 128, "%s/power/set", mqtt_topic_prefix);
-    snprintf(mqtt_topic_mode_command, 128, "%s/mode/set", mqtt_topic_prefix);
-    snprintf(mqtt_topic_temperature_command, 128, "%s/temperature/set", mqtt_topic_prefix);
-    snprintf(mqtt_topic_fan_command, 128, "%s/fan/set", mqtt_topic_prefix);
-    snprintf(mqtt_topic_vane_command, 128, "%s/vane/set", mqtt_topic_prefix);
+    snprintf(mqtt_topic_power_command, 128, "%s/power/set", settings.mqtt_topic_prefix);
+    snprintf(mqtt_topic_mode_command, 128, "%s/mode/set", settings.mqtt_topic_prefix);
+    snprintf(mqtt_topic_temperature_command, 128, "%s/temperature/set", settings.mqtt_topic_prefix);
+    snprintf(mqtt_topic_fan_command, 128, "%s/fan/set", settings.mqtt_topic_prefix);
+    snprintf(mqtt_topic_vane_command, 128, "%s/vane/set", settings.mqtt_topic_prefix);
 
-    mqttClient.setServer(mqtt_host, atoi(mqtt_port));
-    if (strlen(mqtt_username) > 0) {
-        mqttClient.setCredentials(mqtt_username, mqtt_password);
+    mqttClient.setServer(settings.mqtt_host, atoi(settings.mqtt_port));
+    if (strlen(settings.mqtt_username) > 0) {
+        mqttClient.setCredentials(settings.mqtt_username, settings.mqtt_password);
     }
     mqttClient.onMessage(mqttMessage);
     mqttClient.onConnect(mqttConnect);
