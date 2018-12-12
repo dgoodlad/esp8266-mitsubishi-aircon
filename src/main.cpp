@@ -95,16 +95,29 @@ bool validateVaneValue(const char* value) {
         strcmp(value, "SWING") == 0;
 }
 
+void upcase(const char* s, char* buf, int len) {
+    int i = len - 1;
+    while (*s && i-- > 0) {
+        *buf++ = toupper(*s++);
+    }
+    *buf = '\0';
+}
+
 void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
+    char buffer[6];
+    int buflen = 6;
+
     if(strcmp(topic, mqtt_topic_power_command) == 0) {
         Serial.printf("SET power setting to %s\n", payload);
-        if (validatePowerValue(payload)) {
-            heatpump.setPowerSetting(payload);
+        upcase(payload, buffer, buflen);
+        if (validatePowerValue(buffer)) {
+            heatpump.setPowerSetting(String(buffer));
         }
     } else if(strcmp(topic, mqtt_topic_mode_command) == 0) {
         Serial.printf("SET mode setting to %s\n", payload);
-        if (validateModeValue(payload)) {
-            heatpump.setModeSetting(payload);
+        upcase(payload, buffer, buflen);
+        if (validateModeValue(buffer)) {
+            heatpump.setModeSetting(buffer);
         }
     } else if(strcmp(topic, mqtt_topic_temperature_command) == 0) {
         Serial.printf("SET temperature to %f\n", atof(payload));
@@ -113,13 +126,15 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
         }
     } else if(strcmp(topic, mqtt_topic_fan_command) == 0) {
         Serial.printf("SET fan speed to %s\n", payload);
-        if (validateFanValue(payload)) {
-            heatpump.setFanSpeed(payload);
+        upcase(payload, buffer, buflen);
+        if (validateFanValue(buffer)) {
+            heatpump.setFanSpeed(buffer);
         }
     } else if(strcmp(topic, mqtt_topic_vane_command) == 0) {
         Serial.printf("SET vane to %s\n", payload);
-        if (validateVaneValue(payload)) {
-            heatpump.setVaneSetting(payload);
+        upcase(payload, buffer, buflen);
+        if (validateVaneValue(buffer)) {
+            heatpump.setVaneSetting(buffer);
         }
     }
 }
