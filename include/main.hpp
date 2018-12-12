@@ -60,4 +60,10 @@ void saveConfig();
 
 void handleButton();
 
+bool validatePowerValue(const char* value);
+bool validateModeValue(const char* value);
+bool validateTemperatureValue(const char* value);
+bool validateFanValue(const char* value);
+bool validateVaneValue(const char* value);
+
 #endif // __MAIN_HPP_

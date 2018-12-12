@@ -54,22 +54,73 @@ void mqttConnect(bool sessionPresent) {
     mqttClient.subscribe(mqtt_topic_vane_command, 0);
 }
 
+bool validatePowerValue(const char* value) {
+    return
+        strcmp(value, "ON") == 0 ||
+        strcmp(value, "OFF") == 0;
+}
+
+bool validateModeValue(const char* value) {
+    return
+        strcmp(value, "HEAT") == 0 ||
+        strcmp(value, "DRY") == 0 ||
+        strcmp(value, "COOL") == 0 ||
+        strcmp(value, "FAN") == 0 ||
+        strcmp(value, "AUTO") == 0;
+}
+
+bool validateTemperatureValue(const char* value) {
+    float f = atof(value);
+    return f > 15.0 && f < 31;
+}
+
+bool validateFanValue(const char* value) {
+    return
+        strcmp(value, "AUTO") == 0 ||
+        strcmp(value, "QUIET") == 0 ||
+        strcmp(value, "1") == 0 ||
+        strcmp(value, "2") == 0 ||
+        strcmp(value, "3") == 0 ||
+        strcmp(value, "4") == 0;
+}
+
+bool validateVaneValue(const char* value) {
+    return
+        strcmp(value, "AUTO") == 0 ||
+        strcmp(value, "1") == 0 ||
+        strcmp(value, "2") == 0 ||
+        strcmp(value, "3") == 0 ||
+        strcmp(value, "4") == 0 ||
+        strcmp(value, "5") == 0 ||
+        strcmp(value, "SWING") == 0;
+}
+
 void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
-    if(strcmp(topic, mqtt_topic_power_command)) {
+    if(strcmp(topic, mqtt_topic_power_command) == 0) {
         Serial.printf("SET power setting to %s\n", payload);
-        heatpump.setPowerSetting(payload);
-    } else if(strcmp(topic, mqtt_topic_mode_command)) {
+        if (validatePowerValue(payload)) {
+            heatpump.setPowerSetting(payload);
+        }
+    } else if(strcmp(topic, mqtt_topic_mode_command) == 0) {
         Serial.printf("SET mode setting to %s\n", payload);
-        heatpump.setModeSetting(payload);
-    } else if(strcmp(topic, mqtt_topic_temperature_command)) {
+        if (validateModeValue(payload)) {
+            heatpump.setModeSetting(payload);
+        }
+    } else if(strcmp(topic, mqtt_topic_temperature_command) == 0) {
         Serial.printf("SET temperature to %f\n", atof(payload));
-        heatpump.setTemperature(atof(payload));
-    } else if(strcmp(topic, mqtt_topic_fan_command)) {
+        if (validateTemperatureValue(payload)) {
+            heatpump.setTemperature(atof(payload));
+        }
+    } else if(strcmp(topic, mqtt_topic_fan_command) == 0) {
         Serial.printf("SET fan speed to %s\n", payload);
-        heatpump.setFanSpeed(payload);
-    } else if(strcmp(topic, mqtt_topic_vane_command)) {
+        if (validateFanValue(payload)) {
+            heatpump.setFanSpeed(payload);
+        }
+    } else if(strcmp(topic, mqtt_topic_vane_command) == 0) {
         Serial.printf("SET vane to %s\n", payload);
-        heatpump.setVaneSetting(payload);
+        if (validateVaneValue(payload)) {
+            heatpump.setVaneSetting(payload);
+        }
     }
 }
 
