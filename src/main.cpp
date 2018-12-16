@@ -19,10 +19,16 @@ AsyncMqttClient mqttClient;
 
 HeatPump heatpump;
 
+// Detects the heatpump by looking for a HIGH signal on HEATPUMP_DETECT_PIN,
+// then configures the system for either condition. If no heatpump is detected,
+// we assume that we're connected via FTDI to a computer for development, so
+// re-route all debug data back out the default UART pins.
 bool detectHeatpump() {
     bool detected;
 
     pinMode(HEATPUMP_DETECT_PIN, INPUT);
+    pinMode(HEATPUMP_ENABLE_PIN, OUTPUT);
+
     detected = digitalRead(HEATPUMP_DETECT_PIN) == HIGH;
 
     if (detected) {
@@ -34,7 +40,15 @@ bool detectHeatpump() {
         // Talk to the heatpump on GPIO13/15 via UART0
         Serial.begin(2400, SERIAL_8E1);
         Serial.swap();
+
+        // Enable the logic level shifter now that we know there's 5V on the far
+        // side and that we'll have something to talk to
+        digitalWrite(HEATPUMP_ENABLE_PIN, HIGH);
     } else {
+        // Make sure the logic level shifter remains disabled, as it won't be
+        // getting any 5V power anyway
+        digitalWrite(HEATPUMP_ENABLE_PIN, LOW);
+
         // Output debug info on the default serial TX/RX pins via UART0
         DebugSerial = &Serial;
         Serial.begin(115200);

@@ -19,6 +19,7 @@
 HardwareSerial* DebugSerial = &Serial;
 
 bool heatPumpDetected = false;
+bool detectHeatPump();
 
 #define CONFIG_SPIFFS_PATH "/config.json"
 
