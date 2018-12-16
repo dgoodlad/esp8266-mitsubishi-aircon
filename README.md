@@ -6,6 +6,11 @@ using an ESP8266-based wifi module.
 Designed with the Adafruit HUZZAH breakout board in mind, this repo also
 includes a PCB layout to do the requisite logic-level shifting etc.
 
+**NOTE**: this information comes with _no warranty of any kind_. I do not claim
+that any of the software or designs in this repository will work for your
+particular hardware or situation. **MODIFYING AIR CONDITIONING UNITS IS
+DANGEROUS AND YOU DO SO AT YOUR OWN RISK.***
+
 ## Functional description
 
 * Uses [WiFiManager](https://github.com/tzapu/WiFiManager/tree/development) for
