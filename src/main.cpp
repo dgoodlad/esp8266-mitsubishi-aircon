@@ -218,7 +218,7 @@ void setupWifiManager() {
     custom_mqtt_password = new WiFiManagerParameter("mqtt_password", "MQTT Password", settings.mqtt_password, MAX_LENGTH_MQTT_PASSWORD);
     custom_mqtt_topic_prefix = new WiFiManagerParameter("mqtt_topic_prefis", "MQTT Topic Prefix", settings.mqtt_topic_prefix, MAX_LENGTH_MQTT_TOPIC_PREFIX);
 
-    wifiManager = new WiFiManager();
+    wifiManager = new WiFiManager(*DebugSerial);
 
     wifiManager->setSaveConfigCallback(saveConfigCallback);
     wifiManager->addParameter(custom_mqtt_host);
@@ -274,13 +274,21 @@ void setup() {
     heatPumpDetected = detectHeatpump();
 
     DebugSerial->println("\n Starting up...");
+    if (heatPumpDetected) {
+        DebugSerial->println("Heatpump DETECTED");
+    } else {
+        DebugSerial->println("Heatpump NOT DETECTED");
+    }
 
+    DebugSerial->println("Configuring debounce handler for CLEAR button");
     setupClearSettingsButtonHandler();
+    DebugSerial->println("Loading configuration");
     loadConfig();
+    DebugSerial->println("Setting up the wifi manager");
     setupWifiManager();
 
     if (!startWifiManager()) {
-        DebugSerial->println("Failed to connect or timed out");
+        DebugSerial->println("Failed to connect or timed out. Restarting in 3s...");
         delay(3000);
         ESP.restart();
         delay(5000);
