@@ -1,6 +1,26 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
+# Connector:Conn_01x02_Male
+#
+DEF Connector:Conn_01x02_Male J 0 40 Y N 1 F N
+F0 "J" 0 100 50 H V C CNN
+F1 "Connector:Conn_01x02_Male" 0 -200 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ Connector*:*_1x??_*
+$ENDFPLIST
+DRAW
+S 34 -95 0 -105 1 1 6 F
+S 34 5 0 -5 1 1 6 F
+P 2 1 1 6 50 -100 34 -100 N
+P 2 1 1 6 50 0 34 0 N
+X Pin_1 1 200 0 150 L 50 50 1 1 P
+X Pin_2 2 200 -100 150 L 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
 # Connector:Conn_01x04_Male
 #
 DEF Connector:Conn_01x04_Male J 0 40 Y N 1 F N
@@ -27,50 +47,35 @@ X Pin_4 4 200 -200 150 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# Connector:Conn_01x11_Female
+# Connector:Conn_01x06_Male
 #
-DEF Connector:Conn_01x11_Female J 0 40 Y N 1 F N
-F0 "J" 0 600 50 H V C CNN
-F1 "Connector:Conn_01x11_Female" 0 -600 50 H V C CNN
+DEF Connector:Conn_01x06_Male J 0 40 Y N 1 F N
+F0 "J" 0 300 50 H V C CNN
+F1 "Connector:Conn_01x06_Male" 0 -400 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
  Connector*:*_1x??_*
 $ENDFPLIST
 DRAW
-A 0 -500 20 901 -901 1 1 6 N 0 -480 0 -520
-A 0 -400 20 901 -901 1 1 6 N 0 -380 0 -420
-A 0 -300 20 901 -901 1 1 6 N 0 -280 0 -320
-A 0 -200 20 901 -901 1 1 6 N 0 -180 0 -220
-A 0 -100 20 901 -901 1 1 6 N 0 -80 0 -120
-A 0 0 20 901 -901 1 1 6 N 0 20 0 -20
-A 0 100 20 901 -901 1 1 6 N 0 120 0 80
-A 0 200 20 901 -901 1 1 6 N 0 220 0 180
-A 0 300 20 901 -901 1 1 6 N 0 320 0 280
-A 0 400 20 901 -901 1 1 6 N 0 420 0 380
-A 0 500 20 901 -901 1 1 6 N 0 520 0 480
-P 2 1 1 6 -50 -500 -20 -500 N
-P 2 1 1 6 -50 -400 -20 -400 N
-P 2 1 1 6 -50 -300 -20 -300 N
-P 2 1 1 6 -50 -200 -20 -200 N
-P 2 1 1 6 -50 -100 -20 -100 N
-P 2 1 1 6 -50 0 -20 0 N
-P 2 1 1 6 -50 100 -20 100 N
-P 2 1 1 6 -50 200 -20 200 N
-P 2 1 1 6 -50 300 -20 300 N
-P 2 1 1 6 -50 400 -20 400 N
-P 2 1 1 6 -50 500 -20 500 N
-X Pin_1 1 -200 500 150 R 50 50 1 1 P
-X Pin_10 10 -200 -400 150 R 50 50 1 1 P
-X Pin_11 11 -200 -500 150 R 50 50 1 1 P
-X Pin_2 2 -200 400 150 R 50 50 1 1 P
-X Pin_3 3 -200 300 150 R 50 50 1 1 P
-X Pin_4 4 -200 200 150 R 50 50 1 1 P
-X Pin_5 5 -200 100 150 R 50 50 1 1 P
-X Pin_6 6 -200 0 150 R 50 50 1 1 P
-X Pin_7 7 -200 -100 150 R 50 50 1 1 P
-X Pin_8 8 -200 -200 150 R 50 50 1 1 P
-X Pin_9 9 -200 -300 150 R 50 50 1 1 P
+S 34 -295 0 -305 1 1 6 F
+S 34 -195 0 -205 1 1 6 F
+S 34 -95 0 -105 1 1 6 F
+S 34 5 0 -5 1 1 6 F
+S 34 105 0 95 1 1 6 F
+S 34 205 0 195 1 1 6 F
+P 2 1 1 6 50 -300 34 -300 N
+P 2 1 1 6 50 -200 34 -200 N
+P 2 1 1 6 50 -100 34 -100 N
+P 2 1 1 6 50 0 34 0 N
+P 2 1 1 6 50 100 34 100 N
+P 2 1 1 6 50 200 34 200 N
+X Pin_1 1 200 200 150 L 50 50 1 1 P
+X Pin_2 2 200 100 150 L 50 50 1 1 P
+X Pin_3 3 200 0 150 L 50 50 1 1 P
+X Pin_4 4 200 -100 150 L 50 50 1 1 P
+X Pin_5 5 200 -200 150 L 50 50 1 1 P
+X Pin_6 6 200 -300 150 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
@@ -89,6 +94,51 @@ P 2 0 1 20 -80 -30 80 -30 N
 P 2 0 1 20 -80 30 80 30 N
 X ~ 1 0 150 110 D 50 50 1 1 P
 X ~ 2 0 -150 110 U 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# Device:D_Schottky
+#
+DEF Device:D_Schottky D 0 40 N N 1 F N
+F0 "D" 0 100 50 H V C CNN
+F1 "Device:D_Schottky" 0 -100 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ TO-???*
+ *_Diode_*
+ *SingleDiode*
+ D_*
+$ENDFPLIST
+DRAW
+P 2 0 1 0 50 0 -50 0 N
+P 4 0 1 8 50 50 50 -50 -50 0 50 50 N
+P 6 0 1 8 -75 25 -75 50 -50 50 -50 -50 -25 -50 -25 -25 N
+X K 1 -150 0 100 R 50 50 1 1 P
+X A 2 150 0 100 L 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# Device:LED
+#
+DEF Device:LED D 0 40 N N 1 F N
+F0 "D" 0 100 50 H V C CNN
+F1 "Device:LED" 0 -100 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ LED*
+ LED_SMD:*
+ LED_THT:*
+$ENDFPLIST
+DRAW
+P 2 0 1 8 -50 -50 -50 50 N
+P 2 0 1 0 -50 0 50 0 N
+P 4 0 1 8 50 -50 50 50 -50 0 50 -50 N
+P 5 0 1 0 -120 -30 -180 -90 -150 -90 -180 -90 -180 -60 N
+P 5 0 1 0 -70 -30 -130 -90 -100 -90 -130 -90 -130 -60 N
+X K 1 -150 0 100 R 50 50 1 1 P
+X A 2 150 0 100 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
@@ -163,6 +213,85 @@ X NC 9 400 -500 100 L 50 50 1 1 N N
 ENDDRAW
 ENDDEF
 #
+# Switch:SW_Push
+#
+DEF Switch:SW_Push SW 0 40 N N 1 F N
+F0 "SW" 50 100 50 H V L CNN
+F1 "Switch:SW_Push" 0 -60 50 H V C CNN
+F2 "" 0 200 50 H I C CNN
+F3 "" 0 200 50 H I C CNN
+DRAW
+C -80 0 20 0 1 0 N
+C 80 0 20 0 1 0 N
+P 2 0 1 0 0 50 0 120 N
+P 2 0 1 0 100 50 -100 50 N
+X 1 1 -200 0 100 R 50 50 0 1 P
+X 2 2 200 0 100 L 50 50 0 1 P
+ENDDRAW
+ENDDEF
+#
+# dk_PMIC-Voltage-Regulators-Linear:AP2114H-3_3TRG1
+#
+DEF dk_PMIC-Voltage-Regulators-Linear:AP2114H-3_3TRG1 U 0 1 Y Y 1 F N
+F0 "U" -250 150 60 H V C CNN
+F1 "dk_PMIC-Voltage-Regulators-Linear:AP2114H-3_3TRG1" -300 250 60 H V L BNN
+F2 "digikey-footprints:SOT-223" 200 200 60 H I L CNN
+F3 "https://www.diodes.com/assets/Datasheets/AP2114.pdf" 200 300 60 H I L CNN
+F4 "AP2114H-3.3TRG1DICT-ND" 200 400 60 H I L CNN "Digi-Key_PN"
+F5 "AP2114H-3.3TRG1" 200 500 60 H I L CNN "MPN"
+F6 "Integrated Circuits (ICs)" 200 600 60 H I L CNN "Category"
+F7 "PMIC - Voltage Regulators - Linear" 200 700 60 H I L CNN "Family"
+F8 "https://www.diodes.com/assets/Datasheets/AP2114.pdf" 200 800 60 H I L CNN "DK_Datasheet_Link"
+F9 "/product-detail/en/diodes-incorporated/AP2114H-3.3TRG1/AP2114H-3.3TRG1DICT-ND/4505142" 200 900 60 H I L CNN "DK_Detail_Page"
+F10 "IC REG LINEAR 3.3V 1A SOT223" 200 1000 60 H I L CNN "Description"
+F11 "Diodes Incorporated" 200 1100 60 H I L CNN "Manufacturer"
+F12 "Active" 200 1200 60 H I L CNN "Status"
+DRAW
+S -300 100 200 -300 0 1 0 f
+X GND 1 -100 -500 200 U 50 50 1 1 W
+X VOUT 2 400 0 200 L 50 50 1 1 O
+X IN 3 -500 0 200 R 50 50 1 1 I
+X VOUT 4 400 -100 200 L 50 50 1 1 w
+ENDDRAW
+ENDDEF
+#
+# dk_RF-Transceiver-Modules:2491
+#
+DEF dk_RF-Transceiver-Modules:2491 MOD 0 40 Y Y 1 F N
+F0 "MOD" -288 345 60 H V C CNN
+F1 "dk_RF-Transceiver-Modules:2491" -100 -300 60 V V C CNN
+F2 "digikey-footprints:WIFI_Module_ESP8266_2491" 200 200 60 H I L CNN
+F3 "https://www.adafruit.com/images/product-files/2471/0A-ESP8266__Datasheet__EN_v4.3.pdf" 200 300 60 H I L CNN
+F4 "1528-1438-ND" 200 400 60 H I L CNN "Digi-Key_PN"
+F5 "2491" 200 500 60 H I L CNN "MPN"
+F6 "RF/IF and RFID" 200 600 60 H I L CNN "Category"
+F7 "RF Transceiver Modules" 200 700 60 H I L CNN "Family"
+F8 "https://www.adafruit.com/images/product-files/2471/0A-ESP8266__Datasheet__EN_v4.3.pdf" 200 800 60 H I L CNN "DK_Datasheet_Link"
+F9 "/product-detail/en/adafruit-industries-llc/2491/1528-1438-ND/5761206" 200 900 60 H I L CNN "DK_Detail_Page"
+F10 "ESP8266 SMT MODULE" 200 1000 60 H I L CNN "Description"
+F11 "Adafruit Industries LLC" 200 1100 60 H I L CNN "Manufacturer"
+F12 "Active" 200 1200 60 H I L CNN "Status"
+DRAW
+S -400 300 200 -800 0 1 0 f
+X RST 1 -500 200 100 R 50 50 1 1 I
+X IO15 10 300 -300 100 L 50 50 1 1 B
+X IO2 11 -500 -100 100 R 50 50 1 1 B
+X IO0 12 -500 -200 100 R 50 50 1 1 B
+X IO4 13 -500 -300 100 R 50 50 1 1 B
+X IO5 14 -500 -400 100 R 50 50 1 1 B
+X RXD0 15 300 0 100 L 50 50 1 1 O
+X TXD0 16 300 -100 100 L 50 50 1 1 O
+X ADC 2 -500 100 100 R 50 50 1 1 I
+X EN 3 -500 0 100 R 50 50 1 1 I
+X IO16 4 300 -200 100 L 50 50 1 1 B
+X IO14 5 300 -400 100 L 50 50 1 1 B
+X IO12 6 -500 -500 100 R 50 50 1 1 B
+X IO13 7 300 -500 100 L 50 50 1 1 B
+X VCC 8 0 400 100 D 50 50 1 1 W
+X GND 9 0 -900 100 U 50 50 1 1 W
+ENDDRAW
+ENDDEF
+#
 # power:+3V3
 #
 DEF power:+3V3 #PWR 0 0 Y Y 1 F P
@@ -176,21 +305,6 @@ P 2 0 1 0 -30 50 0 100 N
 P 2 0 1 0 0 0 0 100 N
 P 2 0 1 0 0 100 30 50 N
 X +3V3 1 0 0 0 U 50 50 1 1 W N
-ENDDRAW
-ENDDEF
-#
-# power:+5V
-#
-DEF power:+5V #PWR 0 0 Y Y 1 F P
-F0 "#PWR" 0 -150 50 H I C CNN
-F1 "power:+5V" 0 140 50 H V C CNN
-F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-DRAW
-P 2 0 1 0 -30 50 0 100 N
-P 2 0 1 0 0 0 0 100 N
-P 2 0 1 0 0 100 30 50 N
-X +5V 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
@@ -217,6 +331,50 @@ F3 "" 0 0 50 H I C CNN
 DRAW
 P 6 0 1 0 0 0 0 50 -40 75 0 100 40 75 0 50 N
 X pwr 1 0 0 0 U 50 50 0 0 w
+ENDDRAW
+ENDDEF
+#
+# power:VBUS
+#
+DEF power:VBUS #PWR 0 0 Y Y 1 F P
+F0 "#PWR" 0 -150 50 H I C CNN
+F1 "power:VBUS" 0 150 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+P 2 0 1 0 -30 50 0 100 N
+P 2 0 1 0 0 0 0 100 N
+P 2 0 1 0 0 100 30 50 N
+X VBUS 1 0 0 0 U 50 50 1 1 W N
+ENDDRAW
+ENDDEF
+#
+# power:VCC
+#
+DEF power:VCC #PWR 0 0 Y Y 1 F P
+F0 "#PWR" 0 -150 50 H I C CNN
+F1 "power:VCC" 0 150 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+C 0 75 25 0 1 0 N
+P 2 0 1 0 0 0 0 50 N
+X VCC 1 0 0 0 U 50 50 1 1 W N
+ENDDRAW
+ENDDEF
+#
+# power:VPP
+#
+DEF power:VPP #PWR 0 0 Y Y 1 F P
+F0 "#PWR" 0 -150 50 H I C CNN
+F1 "power:VPP" 0 150 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+P 2 0 1 0 -30 50 0 100 N
+P 2 0 1 0 0 0 0 100 N
+P 2 0 1 0 0 100 30 50 N
+X VPP 1 0 0 0 U 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #

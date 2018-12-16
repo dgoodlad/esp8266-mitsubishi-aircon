@@ -1,0 +1,15 @@
+EESchema-LIBRARY Version 2.4
+#encoding utf-8
+#
+# KMR2-SMT
+#
+DEF KMR2-SMT SW 0 40 Y Y 1 F N
+F0 "SW" 0 0 50 H V C CNN
+F1 "KMR2-SMT" 0 0 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+ENDDRAW
+ENDDEF
+#
+#End Library

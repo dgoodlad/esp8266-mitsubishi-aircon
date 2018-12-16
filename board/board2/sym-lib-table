@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name board2)(type Legacy)(uri /home/dgoodlad/src/esp8266-mitsubishi-aircon/board/board2/board2.lib)(options "")(descr ""))
+)
