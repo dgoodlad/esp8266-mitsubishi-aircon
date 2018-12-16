@@ -179,7 +179,7 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
 }
 
 void setupClearSettingsButtonHandler() {
-    clearSettingsButton.attach(CLEAR_SETTINGS_PIN, INPUT_PULLUP);
+    clearSettingsButton.attach(CLEAR_SETTINGS_PIN, INPUT);
 }
 
 void loadConfig() {
