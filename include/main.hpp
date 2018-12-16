@@ -14,7 +14,7 @@
 #define HEATPUMP_ENABLE_PIN 5
 // We look for a 3-second LOW value on this pin to trigger a full reset of all
 // settings.
-#define CLEAR_SETTINGS_PIN 6
+#define CLEAR_SETTINGS_PIN 12
 
 HardwareSerial* DebugSerial = &Serial;
 
