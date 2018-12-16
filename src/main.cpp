@@ -19,6 +19,31 @@ AsyncMqttClient mqttClient;
 
 HeatPump heatpump;
 
+bool detectHeatpump() {
+    bool detected;
+
+    pinMode(HEATPUMP_DETECT_PIN, INPUT);
+    detected = digitalRead(HEATPUMP_DETECT_PIN) == HIGH;
+
+    if (detected) {
+        // Output debug info on GPIO2 via UART1
+        DebugSerial = &Serial1;
+        Serial1.begin(115200);
+        Serial1.setDebugOutput(true);
+
+        // Talk to the heatpump on GPIO13/15 via UART0
+        Serial.begin(2400, SERIAL_8E1);
+        Serial.swap();
+    } else {
+        // Output debug info on the default serial TX/RX pins via UART0
+        DebugSerial = &Serial;
+        Serial.begin(115200);
+        Serial.setDebugOutput(true);
+    }
+
+    return detected;
+}
+
 void saveConfigCallback () {
     shouldSaveConfig = true;
 }
@@ -27,22 +52,22 @@ void heatpumpSettingsChanged() {
     char temperature[4];
     heatpumpSettings settings = heatpump.getSettings();
     snprintf(temperature, 4, "%3.0f", settings.temperature);
-    Serial.printf("PUB power state %s\n", settings.power.c_str());
+    DebugSerial->printf("PUB power state %s\n", settings.power.c_str());
     mqttClient.publish(mqtt_topic_power_state, 0, true, settings.power.c_str());
-    Serial.printf("PUB mode state %s\n", settings.mode.c_str());
+    DebugSerial->printf("PUB mode state %s\n", settings.mode.c_str());
     mqttClient.publish(mqtt_topic_mode_state, 0, true, settings.mode.c_str());
-    Serial.printf("PUB temperature %s\n", temperature);
+    DebugSerial->printf("PUB temperature %s\n", temperature);
     mqttClient.publish(mqtt_topic_temperature_state, 0, true, temperature);
-    Serial.printf("PUB fan state %s\n", settings.fan.c_str());
+    DebugSerial->printf("PUB fan state %s\n", settings.fan.c_str());
     mqttClient.publish(mqtt_topic_fan_state, 0, true, settings.fan.c_str());
-    Serial.printf("PUB vane state %s\n", settings.vane.c_str());
+    DebugSerial->printf("PUB vane state %s\n", settings.vane.c_str());
     mqttClient.publish(mqtt_topic_vane_state, 0, true, settings.vane.c_str());
 }
 
 void heatpumpStatusChanged(heatpumpStatus status) {
     char temperature[4];
     snprintf(temperature, 4, "%3.0f", status.roomTemperature);
-    Serial.printf("PUB temperature %s\n", temperature);
+    DebugSerial->printf("PUB temperature %s\n", temperature);
     mqttClient.publish(mqtt_topic_current_temperature_state, 0, true, temperature);
 }
 
@@ -95,7 +120,7 @@ bool validateVaneValue(const char* value) {
         strcmp(value, "SWING") == 0;
 }
 
-void upcase(const char* s, char* buf, int len) {
+void upcase(const char* s, char* buf, size_t len) {
     int i = len - 1;
     while (*s && i-- > 0) {
         *buf++ = toupper(*s++);
@@ -108,30 +133,30 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
     int buflen = 6;
 
     if(strcmp(topic, mqtt_topic_power_command) == 0) {
-        Serial.printf("SET power setting to %s\n", payload);
+        DebugSerial->printf("SET power setting to %s\n", payload);
         upcase(payload, buffer, buflen);
         if (validatePowerValue(buffer)) {
             heatpump.setPowerSetting(String(buffer));
         }
     } else if(strcmp(topic, mqtt_topic_mode_command) == 0) {
-        Serial.printf("SET mode setting to %s\n", payload);
+        DebugSerial->printf("SET mode setting to %s\n", payload);
         upcase(payload, buffer, buflen);
         if (validateModeValue(buffer)) {
             heatpump.setModeSetting(buffer);
         }
     } else if(strcmp(topic, mqtt_topic_temperature_command) == 0) {
-        Serial.printf("SET temperature to %f\n", atof(payload));
+        DebugSerial->printf("SET temperature to %f\n", atof(payload));
         if (validateTemperatureValue(payload)) {
             heatpump.setTemperature(atof(payload));
         }
     } else if(strcmp(topic, mqtt_topic_fan_command) == 0) {
-        Serial.printf("SET fan speed to %s\n", payload);
+        DebugSerial->printf("SET fan speed to %s\n", payload);
         upcase(payload, buffer, buflen);
         if (validateFanValue(buffer)) {
             heatpump.setFanSpeed(buffer);
         }
     } else if(strcmp(topic, mqtt_topic_vane_command) == 0) {
-        Serial.printf("SET vane to %s\n", payload);
+        DebugSerial->printf("SET vane to %s\n", payload);
         upcase(payload, buffer, buflen);
         if (validateVaneValue(buffer)) {
             heatpump.setVaneSetting(buffer);
@@ -139,14 +164,14 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
     }
 }
 
-void setupButtonHandler() {
-    button.attach(BUTTON_PIN, BUTTON_MODE);
+void setupClearSettingsButtonHandler() {
+    clearSettingsButton.attach(CLEAR_SETTINGS_PIN, INPUT_PULLUP);
 }
 
 void loadConfig() {
     if (SPIFFS.begin()) {
         if (SPIFFS.exists(CONFIG_SPIFFS_PATH)) {
-            Serial.printf("Found config at %s", CONFIG_SPIFFS_PATH);
+            DebugSerial->printf("Found config at %s", CONFIG_SPIFFS_PATH);
             File configFile = SPIFFS.open(CONFIG_SPIFFS_PATH, "r");
             if (configFile) {
                 size_t size = configFile.size();
@@ -168,7 +193,7 @@ void loadConfig() {
         }
     } else {
         // Failed to mount FS
-        Serial.printf("Error mounting SPIFFS");
+        DebugSerial->printf("Error mounting SPIFFS");
     }
 }
 
@@ -195,7 +220,7 @@ void setupWifiManager() {
 bool startWifiManager() {
     char config_ap_name[17];
     snprintf(config_ap_name, 17, "ESP8266 %08x", ESP.getChipId());
-    Serial.printf("Starting wifimanager with AP %s", config_ap_name);
+    DebugSerial->printf("Starting wifimanager with AP %s", config_ap_name);
 
     return wifiManager->autoConnect(config_ap_name, WIFIMANAGER_AP_PASSWORD);
 }
@@ -215,39 +240,38 @@ void saveConfig() {
     }
 
     json.printTo(configFile);
-    json.printTo(Serial);
+    json.printTo(*DebugSerial);
     configFile.close();
 }
 
-void handleButton() {
-    button.update();
-    if (button.read() == LOW && button.duration() > 3000) {
-        Serial.println("Resetting to factory settings");
+void handleClearSettingsButton() {
+    clearSettingsButton.update();
+    if (clearSettingsButton.read() == LOW && clearSettingsButton.duration() > 3000) {
+        DebugSerial->println("Resetting to factory settings");
         wifiManager->resetSettings();
         SPIFFS.remove(CONFIG_SPIFFS_PATH);
-        Serial.println("Restarting...");
+        DebugSerial->println("Restarting...");
         ESP.restart();
         delay(5000);
     }
 }
 
 void setup() {
-    Serial.begin(115200);
-    Serial.setDebugOutput(true);
-    delay(3000);
-    Serial.println("\n Starting up...");
+    heatPumpDetected = detectHeatpump();
 
-    setupButtonHandler();
+    DebugSerial->println("\n Starting up...");
+
+    setupClearSettingsButtonHandler();
     loadConfig();
     setupWifiManager();
 
     if (!startWifiManager()) {
-        Serial.println("Failed to connect or timed out");
+        DebugSerial->println("Failed to connect or timed out");
         delay(3000);
         ESP.restart();
         delay(5000);
     } else {
-        Serial.println("Connected to wifi");
+        DebugSerial->println("Connected to wifi");
     }
 
     // Successfully connected to wifi
@@ -286,15 +310,15 @@ void setup() {
     heatpump.setSettingsChangedCallback(heatpumpSettingsChanged);
     heatpump.setStatusChangedCallback(heatpumpStatusChanged);
 
-    #ifdef HEATPUMP_ENABLE
-    heatpump.connect(&Serial);
-    #endif
+    if (heatPumpDetected) {
+        heatpump.connect(&Serial);
+    }
 }
 
 void loop() {
-    #ifdef HEATPUMP_ENABLE
-    heatpump.sync();
-    #endif
+    if (heatPumpDetected) {
+        heatpump.sync();
+    }
 
-    handleButton();
+    handleClearSettingsButton();
 }

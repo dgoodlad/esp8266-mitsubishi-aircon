@@ -1,6 +1,25 @@
 #ifndef __MAIN_HPP_
 #define __MAIN_HPP_
 
+#include <Arduino.h>
+
+#define DEBUG_BAUD_RATE 115200
+
+// We'll look for a HIGH signal on this pin to decide if the heatpump unit is
+// powering us
+#define HEATPUMP_DETECT_PIN 4
+// We assume a logic-level shift chip's "enable" or OE pin is wired here with a
+// pulldown resistor. We'll output HIGH once we're ready to talk to the
+// heatpump.
+#define HEATPUMP_ENABLE_PIN 5
+// We look for a 3-second LOW value on this pin to trigger a full reset of all
+// settings.
+#define CLEAR_SETTINGS_PIN 6
+
+HardwareSerial* DebugSerial = &Serial;
+
+bool heatPumpDetected = false;
+
 #define CONFIG_SPIFFS_PATH "/config.json"
 
 #include <WiFiManager.h>
@@ -46,19 +65,17 @@ char mqtt_topic_temperature_command[128];
 char mqtt_topic_fan_command[128];
 char mqtt_topic_vane_command[128];
 
-#define BUTTON_PIN 0
-#define BUTTON_MODE INPUT
-Bounce button;
+Bounce clearSettingsButton;
 bool shouldStartConfigAP = false;
 bool shouldResetSettings = false;
 
-void setupButtonHander();
+void setupClearSettingsButtonHandler();
 void loadConfig();
 void setupWifiManager();
 bool startWifiManager();
 void saveConfig();
 
-void handleButton();
+void handleClearSettingsButton();
 
 bool validatePowerValue(const char* value);
 bool validateModeValue(const char* value);
