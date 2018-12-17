@@ -1,0 +1,35 @@
+"Source:","/home/dgoodlad/src/esp8266-mitsubishi-aircon/pcb/mitsu-huzzah-interface-board.sch"
+"Date:","Mon 17 Dec 2018 22:51:15 AEDT"
+"Tool:","Eeschema 5.0.0+dfsg1-2"
+"Generator:","/usr/share/kicad/plugins/bom_csv_grouped_by_value.py"
+"Component Count:","11"
+
+"Individual Components:"
+
+"Item","Qty","Reference(s)","Value","LibPart","Footprint","Datasheet"
+"","","A1","HUZZAH","MCU_Module:Adafruit_HUZZAH_ESP8266_breakout","mitsu-huzzah-interface-footprints:Adafruit_HUZZAH_ESP8266_breakout_revA_WithMountingHoles","https://www.adafruit.com/product/2471"
+"","","C1","0.1uF","Device:C","Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"","","C2","0.1uF","Device:C","Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"","","J1","AIRCON","Connector_Generic:Conn_01x04","Connector_JST:JST_PH_S4B-PH-K_1x04_P2.00mm_Horizontal","~"
+"","","J2","DEBUG","Connector_Generic:Conn_01x02","Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical","~"
+"","","R1","3K9","Device:R","Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"","","R2","6K8","Device:R","Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"","","R3","1K","Device:R","Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"","","R4","1K","Device:R","Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"","","SW1","KMR2","Switch:SW_Push","Button_Switch_SMD:SW_SPST_KMR2",""
+"","","U1","TXB0104DR","Logic_LevelTranslator:TXB0104D","Package_SO:SOIC-14_3.9x8.7mm_P1.27mm","http://www.ti.com/lit/ds/symlink/txb0104.pdf"
+
+
+
+"Collated Components:"
+
+"Item","Qty","Reference(s)","Value","LibPart","Footprint","Datasheet"
+"1","1","A1","HUZZAH","MCU_Module:Adafruit_HUZZAH_ESP8266_breakout","mitsu-huzzah-interface-footprints:Adafruit_HUZZAH_ESP8266_breakout_revA_WithMountingHoles","https://www.adafruit.com/product/2471"
+"2","2","C1, C2","0.1uF","Device:C","Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"3","1","J1","AIRCON","Connector_Generic:Conn_01x04","Connector_JST:JST_PH_S4B-PH-K_1x04_P2.00mm_Horizontal","~"
+"4","1","J2","DEBUG","Connector_Generic:Conn_01x02","Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical","~"
+"5","1","R1","3K9","Device:R","Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"6","1","R2","6K8","Device:R","Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"7","2","R3, R4","1K","Device:R","Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder","~"
+"8","1","SW1","KMR2","Switch:SW_Push","Button_Switch_SMD:SW_SPST_KMR2",""
+"9","1","U1","TXB0104DR","Logic_LevelTranslator:TXB0104D","Package_SO:SOIC-14_3.9x8.7mm_P1.27mm","http://www.ti.com/lit/ds/symlink/txb0104.pdf"
