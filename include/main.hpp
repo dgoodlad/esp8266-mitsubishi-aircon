@@ -53,6 +53,7 @@ WiFiManager *wifiManager;
 
 Settings settings;
 
+char mqtt_topic_availability[128];
 char mqtt_topic_power_state[128];
 char mqtt_topic_mode_state[128];
 char mqtt_topic_temperature_state[128];

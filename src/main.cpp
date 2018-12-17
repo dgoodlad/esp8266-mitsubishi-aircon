@@ -87,6 +87,7 @@ void mqttConnect(bool sessionPresent) {
     mqttClient.subscribe(mqtt_topic_temperature_command, 0);
     mqttClient.subscribe(mqtt_topic_fan_command, 0);
     mqttClient.subscribe(mqtt_topic_vane_command, 0);
+    mqttClient.publish(mqtt_topic_availability, 2, true, "online");
 }
 
 bool validatePowerValue(const char* value) {
@@ -306,6 +307,7 @@ void setup() {
         saveConfig();
     }
 
+    snprintf(mqtt_topic_availability, 128, "%s/availability", settings.mqtt_topic_prefix);
     snprintf(mqtt_topic_power_state, 128, "%s/power/state", settings.mqtt_topic_prefix);
     snprintf(mqtt_topic_mode_state, 128, "%s/mode/state", settings.mqtt_topic_prefix);
     snprintf(mqtt_topic_temperature_state, 128, "%s/temperature/state", settings.mqtt_topic_prefix);
@@ -325,6 +327,7 @@ void setup() {
     }
     mqttClient.onMessage(mqttMessage);
     mqttClient.onConnect(mqttConnect);
+    mqttClient.setWill(mqtt_topic_availability, 2, true, "offline");
     mqttClient.connect();
 
     heatpump.setSettingsChangedCallback(heatpumpSettingsChanged);
