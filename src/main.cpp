@@ -134,8 +134,9 @@ bool validateVaneValue(const char* value) {
         strcmp(value, "SWING") == 0;
 }
 
-void upcase(const char* s, char* buf, size_t len) {
-    int i = len - 1;
+void upcase(const char* s, size_t s_len, char* buf, size_t buf_len) {
+    int i = s_len;
+    if (buf_len - 1 < i) { i = buf_len - 1; }
     while (*s && i-- > 0) {
         *buf++ = toupper(*s++);
     }
@@ -147,31 +148,32 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
     int buflen = 6;
 
     if(strcmp(topic, mqtt_topic_power_command) == 0) {
-        DebugSerial->printf("SET power setting to %s\n", payload);
-        upcase(payload, buffer, buflen);
+        upcase(payload, len, buffer, buflen);
+        DebugSerial->printf("SET power setting to %s\n", buffer);
         if (validatePowerValue(buffer)) {
             heatpump.setPowerSetting(String(buffer));
         }
     } else if(strcmp(topic, mqtt_topic_mode_command) == 0) {
-        DebugSerial->printf("SET mode setting to %s\n", payload);
-        upcase(payload, buffer, buflen);
+        upcase(payload, len, buffer, buflen);
+        DebugSerial->printf("SET mode setting to %s\n", buffer);
         if (validateModeValue(buffer)) {
             heatpump.setModeSetting(buffer);
         }
     } else if(strcmp(topic, mqtt_topic_temperature_command) == 0) {
-        DebugSerial->printf("SET temperature to %f\n", atof(payload));
-        if (validateTemperatureValue(payload)) {
-            heatpump.setTemperature(atof(payload));
+        upcase(payload, len, buffer, buflen);
+        DebugSerial->printf("SET temperature to %f\n", atof(buffer));
+        if (validateTemperatureValue(buffer)) {
+            heatpump.setTemperature(atof(buffer));
         }
     } else if(strcmp(topic, mqtt_topic_fan_command) == 0) {
-        DebugSerial->printf("SET fan speed to %s\n", payload);
-        upcase(payload, buffer, buflen);
+        upcase(payload, len, buffer, buflen);
+        DebugSerial->printf("SET fan speed to %s\n", buffer);
         if (validateFanValue(buffer)) {
             heatpump.setFanSpeed(buffer);
         }
     } else if(strcmp(topic, mqtt_topic_vane_command) == 0) {
-        DebugSerial->printf("SET vane to %s\n", payload);
-        upcase(payload, buffer, buflen);
+        upcase(payload, len, buffer, buflen);
+        DebugSerial->printf("SET vane to %s\n", buffer);
         if (validateVaneValue(buffer)) {
             heatpump.setVaneSetting(buffer);
         }
