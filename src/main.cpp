@@ -64,8 +64,13 @@ void heatpumpSettingsChanged() {
     snprintf(temperature, 4, "%3.0f", settings.temperature);
     DebugSerial->printf("PUB power state %s\n", settings.power.c_str());
     mqttClient.publish(mqtt_topic_power_state, 0, true, settings.power.c_str());
-    DebugSerial->printf("PUB mode state %s\n", settings.mode.c_str());
-    mqttClient.publish(mqtt_topic_mode_state, 0, true, settings.mode.c_str());
+    if (heatpump.getPowerSettingBool()) {
+        DebugSerial->printf("PUB mode state %s\n", settings.mode.c_str());
+        mqttClient.publish(mqtt_topic_mode_state, 0, true, settings.mode.c_str());
+    } else {
+        DebugSerial->printf("PUB mode state OFF\n");
+        mqttClient.publish(mqtt_topic_mode_state, 0, true, "OFF");
+    }
     DebugSerial->printf("PUB temperature %s\n", temperature);
     mqttClient.publish(mqtt_topic_temperature_state, 0, true, temperature);
     DebugSerial->printf("PUB fan state %s\n", settings.fan.c_str());
