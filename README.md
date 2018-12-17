@@ -1,6 +1,6 @@
 # ESP8266 / Mitsubishi AC interface
 
-Software to control and monitor Mitsubishi air conditioning units over MQTT
+Software to control and monitor some Mitsubishi air conditioning units over MQTT
 using an ESP8266-based wifi module.
 
 Designed with the Adafruit HUZZAH breakout board in mind, this repo also
@@ -10,6 +10,20 @@ includes a PCB layout to do the requisite logic-level shifting etc.
 that any of the software or designs in this repository will work for your
 particular hardware or situation. **MODIFYING AIR CONDITIONING UNITS IS
 DANGEROUS AND YOU DO SO AT YOUR OWN RISK.***
+
+## Supported Models
+
+I haven't done any broad testing beyond the units in my own home. The underlying
+library states that it has been
+
+> Tested with Mitsubishi HeatPump MSZ-FH/GE (wall units) and SEZ-KD (ducted
+> units)
+
+and offers a wiki page listing its [Supported
+Models](https://github.com/SwiCago/HeatPump/wiki/Supported-models). Check there
+as a good place to start! Importantly, that page notes that
+
+> if your unit has cn105 port, it is most likely supported
 
 ## Functional description
 
@@ -72,3 +86,5 @@ You'll need the following to build the PCB:
 | R3, R4       | 1K        | SMD 0603 Resistor                           | [link]()                                                            |
 | SW1          | KMR2      | SMD tactile push-button switch              | [link](https://www.ckswitches.com/media/1479/kmr2.pdf)              |
 | U1           | TXB0104DR | 4-channel logic level shifter, SOIC package | [link](http://www.ti.com/lit/ds/symlink/txb0104.pdf)                |
+
+You should be able to pick these parts up for under AUD25, but YMMV.
