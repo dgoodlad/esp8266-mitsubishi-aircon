@@ -1,0 +1,24 @@
+# Example entry for a unit configured with MQTT prefix "ac/office"
+---
+climate:
+  - platform: mqtt
+    name: Office
+    availability_topic: "ac/office/availability"
+    payload_available: "online"
+    payload_not_available: "offline"
+    current_temperature_topic: "ac/office/current_temperature/state"
+    power_command_topic: "ac/office/power/set"
+    power_state_topic: "ac/office/power/state"
+    mode_command_topic: "ac/office/mode/set"
+    mode_state_topic: "ac/office/mode/state"
+    modes: ["HEAT", "DRY", "COOL", "FAN", "AUTO"]
+    temperature_command_topic: "ac/office/temperature/set"
+    temperature_state_topic: "ac/office/temperature/state"
+    fan_mode_command_topic: "ac/office/fan/set"
+    fan_mode_state_topic: "ac/office/fan/state"
+    fan_modes: ["AUTO", "QUIET", "1", "2", "3", "4"]
+    swing_mode_command_topic: "ac/office/vane/set"
+    swing_mode_state_topic: "ac/office/vane/state"
+    swing_modes: ["AUTO", "1", "2", "3", "4", "SWING"]
+    min_temp: 15
+    max_temp: 31
