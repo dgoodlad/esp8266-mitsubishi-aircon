@@ -131,7 +131,7 @@ bool validateVaneValue(const char* value) {
 }
 
 void upcase(const char* s, size_t s_len, char* buf, size_t buf_len) {
-    int i = s_len;
+    size_t i = s_len;
     if (buf_len - 1 < i) { i = buf_len - 1; }
     while (*s && i-- > 0) {
         *buf++ = toupper(*s++);
@@ -141,7 +141,7 @@ void upcase(const char* s, size_t s_len, char* buf, size_t buf_len) {
 
 void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, size_t len, size_t index, size_t total) {
     char buffer[6];
-    int buflen = 6;
+    size_t buflen = 6;
 
     if(strcmp(topic, mqtt_topic_power_command) == 0) {
         upcase(payload, len, buffer, buflen);
