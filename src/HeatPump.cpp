@@ -83,11 +83,18 @@ HeatPump::HeatPump() {
 // Public Methods //////////////////////////////////////////////////////////////
 
 bool HeatPump::connect(HardwareSerial *serial) {
+  return connect(serial, false);
+}
+
+bool HeatPump::connect(HardwareSerial *serial, bool swapPins) {
   if(serial != NULL) {
     _HardSerial = serial;
   }
   connected = false;
   _HardSerial->begin(2400, SERIAL_8E1);
+  if(swapPins) {
+    _HardSerial->swap();
+  }
   if(onConnectCallback) {
     onConnectCallback();
   }

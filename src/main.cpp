@@ -37,10 +37,6 @@ bool detectHeatpump() {
         Serial1.begin(115200);
         Serial1.setDebugOutput(true);
 
-        // Talk to the heatpump on GPIO13/15 via UART0
-        Serial.begin(2400, SERIAL_8E1);
-        Serial.swap();
-
         // Enable the logic level shifter now that we know there's 5V on the far
         // side and that we'll have something to talk to
         digitalWrite(HEATPUMP_ENABLE_PIN, HIGH);
@@ -335,7 +331,9 @@ void setup() {
     heatpump.setStatusChangedCallback(heatpumpStatusChanged);
 
     if (heatPumpDetected) {
-        heatpump.connect(&Serial);
+        // Talk to the heatpump on GPIO13/15 via UART0 by telling the heatpump
+        // class to call `Serial.swap()`
+        heatpump.connect(&Serial, true);
     }
 }
 
