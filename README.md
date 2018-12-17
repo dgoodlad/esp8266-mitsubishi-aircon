@@ -39,13 +39,17 @@ DANGEROUS AND YOU DO SO AT YOUR OWN RISK.***
 
 ## PCB
 
+**NOTE** this is a work-in-progress, and I have not yet built this PCB. I've
+documented what I plan here, not what I've done yet, and will remove this note
+once it's been tested in the real world.
+
 ![PCB Schematic](docs/images/pcb-schematic.png?raw=true)
 ![PCB 3D Render](docs/images/pcb-render.png?raw=true)
 ![PCB Layout (top-side)](docs/images/pcb-layout-top.png?raw=true)
 ![PCB Layout (bottom-side)](docs/images/pcb-layout-bottom.png?raw=true)
 
 I used [OSH Park](https://oshpark.com/) to fabricate these PCBs, it cost about
-10 USD with free shipping to :flag-au: Australia for three boards.
+10 USD with free shipping to 🇦🇺Australia🇦🇺 for three boards.
 
 Note that the HUZZAH is **revA** with _11 pin connectors_, not the newer 10-pin
 version. The 11-pin version is just what I had a few of lying around, and they
@@ -57,14 +61,14 @@ to modify the board layout to use the newer 10-pin version instead.
 
 You'll need the following to build the PCB:
 
-| Reference(s) | Value       | Description                                    | Datasheet                                                           |
-| ------------ | -----       | -----------                                    | ---------                                                           |
-| A1           | HUZZAH      | Adafruit HUZZAH (revA) breakout                | [link](https://learn.adafruit.com/adafruit-huzzah-esp8266-breakout) |
-| C1, C2       | 0.1uF       | SMD 0603 Tantalum Capacitor                    | [link]()                                                            |
-| J1           | AIRCON      | JST PH 4-pin Male Connector                    | [link](http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)              |
-| J2           | DEBUG       | 2-pin 0.1" pin header (male)                   | [link]()                                                            |
-| R1           | 3K9         | SMD 0603 Resistor                              | [link]()                                                            |
-| R2           | 6K8         | SMD 0603 Resistor                              | [link]()                                                            |
-| R3, R4       | 1K          | SMD 0603 Resistor                              | [link]()                                                            |
-| SW1          | KMR2        | SMD tactile push-button switch                 | [link](https://www.ckswitches.com/media/1479/kmr2.pdf)              |
-| U1           | TXB0102DCUT | 2-channel logic level shifter, VSSOP-8 package | [link](http://www.ti.com/lit/ds/symlink/txb0102.pdf)                |
+| Reference(s) | Value     | Description                                 | Datasheet                                                           |
+| ------------ | -----     | -----------                                 | ---------                                                           |
+| A1           | HUZZAH    | Adafruit HUZZAH (revA) breakout             | [link](https://learn.adafruit.com/adafruit-huzzah-esp8266-breakout) |
+| C1, C2       | 0.1uF     | SMD 0603 Ceramic Capacitor                  | [link]()                                                            |
+| J1           | AIRCON    | JST PH 4-pin Male Connector                 | [link](http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)              |
+| J2           | DEBUG     | 2-pin 0.1" pin header (male)                | [link]()                                                            |
+| R1           | 3K9       | SMD 0603 Resistor                           | [link]()                                                            |
+| R2           | 6K8       | SMD 0603 Resistor                           | [link]()                                                            |
+| R3, R4       | 1K        | SMD 0603 Resistor                           | [link]()                                                            |
+| SW1          | KMR2      | SMD tactile push-button switch              | [link](https://www.ckswitches.com/media/1479/kmr2.pdf)              |
+| U1           | TXB0104DR | 4-channel logic level shifter, SOIC package | [link](http://www.ti.com/lit/ds/symlink/txb0104.pdf)                |
