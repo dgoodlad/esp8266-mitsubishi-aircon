@@ -57,7 +57,7 @@ as a good place to start! Importantly, that page notes that
 documented what I plan here, not what I've done yet, and will remove this note
 once it's been tested in the real world.
 
-![PCB Schematic](docs/images/pcb-schematic.png?raw=true)
+![PCB Schematic](docs/images/pcb-schematic.svg?raw=true)
 ![PCB 3D Render](docs/images/pcb-render.png?raw=true)
 ![PCB Layout (top-side)](docs/images/pcb-layout-top.png?raw=true)
 ![PCB Layout (bottom-side)](docs/images/pcb-layout-bottom.png?raw=true)
