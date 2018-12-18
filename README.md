@@ -81,8 +81,8 @@ You'll need the following to build the PCB:
 | C1, C2       | 0.1uF     | SMD 0603 Ceramic Capacitor                  | [link]()                                                            |
 | J1           | AIRCON    | JST PH 4-pin Male Connector                 | [link](http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)              |
 | J2           | DEBUG     | 2-pin 0.1" pin header (male)                | [link]()                                                            |
-| R1           | 3K9       | SMD 0603 Resistor                           | [link]()                                                            |
-| R2           | 6K8       | SMD 0603 Resistor                           | [link]()                                                            |
+| R1           | 2K2       | SMD 0603 Resistor                           | [link]()                                                            |
+| R2           | 3K3       | SMD 0603 Resistor                           | [link]()                                                            |
 | R3, R4       | 1K        | SMD 0603 Resistor                           | [link]()                                                            |
 | SW1          | KMR2      | SMD tactile push-button switch              | [link](https://www.ckswitches.com/media/1479/kmr2.pdf)              |
 | U1           | TXB0104DR | 4-channel logic level shifter, SOIC package | [link](http://www.ti.com/lit/ds/symlink/txb0104.pdf)                |
