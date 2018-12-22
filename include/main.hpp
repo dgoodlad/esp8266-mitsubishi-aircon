@@ -2,6 +2,10 @@
 #define __MAIN_HPP_
 
 #include <Arduino.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
+
+const char* otaPassword = "aircon";
 
 #define DEBUG_BAUD_RATE 115200
 

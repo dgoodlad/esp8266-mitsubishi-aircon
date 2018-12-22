@@ -302,6 +302,41 @@ void setup() {
 
     // Successfully connected to wifi
 
+    ArduinoOTA.onStart([]() {
+        String type;
+        if (ArduinoOTA.getCommand() == U_FLASH) {
+            type = "sketch";
+        } else {
+            type = "filesystem";
+        }
+
+        DebugSerial->println("Start updating " + type);
+    });
+    ArduinoOTA.onEnd([]() {
+        DebugSerial->println("\nEnd updating");
+        delay(500);
+    });
+    ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+        if (progress > 0 && total > 0)
+            DebugSerial->printf("Progress: %u%%\r", (progress / (total / 100)));
+    });
+    ArduinoOTA.onError([](ota_error_t error) {
+        DebugSerial->printf("Error[%u]: ", error);
+        if (error == OTA_AUTH_ERROR) {
+            DebugSerial->println("Auth Failed");
+        } else if (error == OTA_BEGIN_ERROR) {
+            DebugSerial->println("Begin Failed");
+        } else if (error == OTA_CONNECT_ERROR) {
+            DebugSerial->println("Connect Failed");
+        } else if (error == OTA_RECEIVE_ERROR) {
+            DebugSerial->println("Receive Failed");
+        } else if (error == OTA_END_ERROR) {
+            DebugSerial->println("End Failed");
+        }
+    });
+    ArduinoOTA.setPassword(otaPassword);
+    ArduinoOTA.begin();
+
     strncpy(settings.mqtt_host, custom_mqtt_host->getValue(), MAX_LENGTH_MQTT_HOST);
     strncpy(settings.mqtt_port, custom_mqtt_port->getValue(), MAX_LENGTH_MQTT_PORT);
     strncpy(settings.mqtt_username, custom_mqtt_username->getValue(), MAX_LENGTH_MQTT_USERNAME);
@@ -346,6 +381,8 @@ void setup() {
 }
 
 void loop() {
+    ArduinoOTA.handle();
+
     if (heatPumpDetected) {
         heatpump.sync();
     }
