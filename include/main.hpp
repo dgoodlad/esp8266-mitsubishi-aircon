@@ -70,6 +70,8 @@ WiFiManager *wifiManager;
 
 Settings settings;
 
+char mqtt_topic_info[128];
+
 char mqtt_topic_availability[128];
 char mqtt_topic_power_state[128];
 char mqtt_topic_mode_state[128];
@@ -101,5 +103,8 @@ bool validateModeValue(const char* value);
 bool validateTemperatureValue(const char* value);
 bool validateFanValue(const char* value);
 bool validateVaneValue(const char* value);
+
+void publishSystemBootInfo();
+void publishSystemStatus();
 
 #endif // __MAIN_HPP_

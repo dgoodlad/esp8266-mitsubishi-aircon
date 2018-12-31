@@ -112,6 +112,7 @@ void mqttConnect(bool sessionPresent) {
     mqttClient.subscribe(mqtt_topic_fan_command, 0);
     mqttClient.subscribe(mqtt_topic_vane_command, 0);
     mqttClient.publish(mqtt_topic_availability, 2, true, "online");
+    publishSystemBootInfo();
 }
 
 bool validatePowerValue(const char* value) {
@@ -294,6 +295,24 @@ void handleClearSettingsButton() {
     }
 }
 
+void publishSystemBootInfo() {
+    char buffer[256];
+    snprintf(buffer, 256, "Reset reason: %s", ESP.getResetReason().c_str());
+    mqttClient.publish(mqtt_topic_info, 0, false, buffer);
+    snprintf(buffer, 256, "Chip ID: %08x", ESP.getChipId());
+    mqttClient.publish(mqtt_topic_info, 0, false, buffer);
+    snprintf(buffer, 256, "Core: %s\nSDK: %s\nCPU Frequency: %d MHz", ESP.getCoreVersion().c_str(), ESP.getSdkVersion(), ESP.getCpuFreqMHz());
+    mqttClient.publish(mqtt_topic_info, 0, false, buffer);
+    snprintf(buffer, 256, "Sketch size: %d\nSketch free: %d\nSketch MD5: %s", ESP.getSketchSize(), ESP.getFreeSketchSpace(), ESP.getSketchMD5().c_str());
+    mqttClient.publish(mqtt_topic_info, 0, false, buffer);
+}
+
+void publishSystemStatus() {
+    char buffer[256];
+    snprintf(buffer, 256, "Uptime: %d mins\nFree heap: %d", (int) (millis() / 60000), ESP.getFreeHeap());
+    mqttClient.publish(mqtt_topic_info, 0, false, buffer);
+}
+
 void setup() {
     heatPumpDetected = detectHeatpump();
 
@@ -367,6 +386,7 @@ void setup() {
         saveConfig();
     }
 
+    snprintf(mqtt_topic_info, 128, "%s/info", settings.mqtt_topic_prefix);
     snprintf(mqtt_topic_availability, 128, "%s/availability", settings.mqtt_topic_prefix);
     snprintf(mqtt_topic_power_state, 128, "%s/power/state", settings.mqtt_topic_prefix);
     snprintf(mqtt_topic_mode_state, 128, "%s/mode/state", settings.mqtt_topic_prefix);
@@ -395,17 +415,22 @@ void setup() {
     heatpump.setStatusChangedCallback(heatpumpStatusChanged);
 
     if (heatPumpDetected) {
-        // Talk to the heatpump on GPIO13/15 via UART0 by telling the heatpump
-        // class to call `Serial.swap()`
         heatpump.connect(&Serial, SWAP_PINS);
     }
 }
+
+unsigned long lastSystemStatusTime = 0;
 
 void loop() {
     ArduinoOTA.handle();
 
     if (heatPumpDetected) {
         heatpump.sync();
+    }
+
+    if (millis() - lastSystemStatusTime > 60000) {
+        lastSystemStatusTime = millis();
+        publishSystemStatus();
     }
 
     handleClearSettingsButton();
