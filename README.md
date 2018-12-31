@@ -53,10 +53,6 @@ as a good place to start! Importantly, that page notes that
 
 ## PCB
 
-**NOTE** this is a work-in-progress, and I have not yet built this PCB. I've
-documented what I plan here, not what I've done yet, and will remove this note
-once it's been tested in the real world.
-
 ![PCB Schematic](docs/images/pcb-schematic.svg)
 ![PCB 3D Render](docs/images/pcb-render.png?raw=true)
 ![PCB Layout (top-side)](docs/images/pcb-layout-top.png?raw=true)
@@ -75,16 +71,16 @@ to modify the board layout to use the newer 10-pin version instead.
 
 You'll need the following to build the PCB:
 
-| Reference(s) | Value     | Description                                 | Datasheet                                                           |
-| ------------ | -----     | -----------                                 | ---------                                                           |
-| A1           | HUZZAH    | Adafruit HUZZAH (revA) breakout             | [link](https://learn.adafruit.com/adafruit-huzzah-esp8266-breakout) |
-| C1, C2       | 0.1uF     | SMD 0603 Ceramic Capacitor                  | [link]()                                                            |
-| J1           | AIRCON    | JST PH 4-pin Male Connector                 | [link](http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)              |
-| J2           | DEBUG     | 2-pin 0.1" pin header (male)                | [link]()                                                            |
-| R1           | 2K2       | SMD 0603 Resistor                           | [link]()                                                            |
-| R2           | 3K3       | SMD 0603 Resistor                           | [link]()                                                            |
-| R3, R4       | 1K        | SMD 0603 Resistor                           | [link]()                                                            |
-| SW1          | KMR2      | SMD tactile push-button switch              | [link](https://www.ckswitches.com/media/1479/kmr2.pdf)              |
-| U1           | TXB0104DR | 4-channel logic level shifter, SOIC package | [link](http://www.ti.com/lit/ds/symlink/txb0104.pdf)                |
+| Reference(s) | Qty   | Value       | Description                                 | Datasheet                                                           |   |   |   |   |   |   |   |   |   |
+| ------------ | ----- | ----------- | ---------                                   |                                                                     |   |   |   |   |   |   |   |   |   |
+| A1           | 1     | HUZZAH      | Adafruit HUZZAH (revA) breakout             | [link](https://learn.adafruit.com/adafruit-huzzah-esp8266-breakout) |   |   |   |   |   |   |   |   |   |
+| C1, C2       | 2     | 0.1uF       | SMD 0603 Ceramic Capacitor                  | [link]()                                                            |   |   |   |   |   |   |   |   |   |
+| J1           | 1     | AIRCON      | JST PH 4-pin Male Connector                 | [link](http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)              |   |   |   |   |   |   |   |   |   |
+| J2           | 1     | DEBUG       | 2-pin 0.1" pin header (male)                | [link]()                                                            |   |   |   |   |   |   |   |   |   |
+| R1           | 1     | 2K2         | SMD 0603 Resistor                           | [link]()                                                            |   |   |   |   |   |   |   |   |   |
+| R2           | 1     | 3K3         | SMD 0603 Resistor                           | [link]()                                                            |   |   |   |   |   |   |   |   |   |
+| R3, R4       | 2     | 1K          | SMD 0603 Resistor                           | [link]()                                                            |   |   |   |   |   |   |   |   |   |
+| SW1          | 1     | KMR2        | SMD tactile push-button switch              | [link](https://www.ckswitches.com/media/1479/kmr2.pdf)              |   |   |   |   |   |   |   |   |   |
+| U1           | 1     | TXB0104DR   | 4-channel logic level shifter, SOIC package | [link](http://www.ti.com/lit/ds/symlink/txb0104.pdf)                |   |   |   |   |   |   |   |   |   |
 
 You should be able to pick these parts up for under AUD25, but YMMV.
