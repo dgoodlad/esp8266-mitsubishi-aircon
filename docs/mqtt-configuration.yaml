@@ -3,6 +3,7 @@
 climate:
   - platform: mqtt
     name: Office
+    value_template: "{{ value|lower }}"
     availability_topic: "ac/office/availability"
     payload_available: "online"
     payload_not_available: "offline"
@@ -11,14 +12,14 @@ climate:
     power_state_topic: "ac/office/power/state"
     mode_command_topic: "ac/office/mode/set"
     mode_state_topic: "ac/office/mode/state"
-    modes: ["HEAT", "DRY", "COOL", "FAN", "AUTO"]
+    modes: ["off", "heat", "dry", "cool", "fan", "auto"]
     temperature_command_topic: "ac/office/temperature/set"
     temperature_state_topic: "ac/office/temperature/state"
     fan_mode_command_topic: "ac/office/fan/set"
     fan_mode_state_topic: "ac/office/fan/state"
-    fan_modes: ["AUTO", "QUIET", "1", "2", "3", "4"]
+    fan_modes: ["auto", "quiet", "1", "2", "3", "4"]
     swing_mode_command_topic: "ac/office/vane/set"
     swing_mode_state_topic: "ac/office/vane/state"
-    swing_modes: ["AUTO", "1", "2", "3", "4", "SWING"]
+    swing_modes: ["auto", "1", "2", "3", "4", "swing"]
     min_temp: 15
     max_temp: 31
