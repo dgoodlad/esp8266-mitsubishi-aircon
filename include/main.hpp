@@ -7,6 +7,19 @@
 
 const char* otaPassword = "aircon";
 
+#ifdef HARDWARE_V01
+#define SWAP_PINS false
+#endif
+
+#ifdef HARDWARE_V02
+#define SWAP_PINS true
+#endif
+
+#ifndef SWAP_PINS
+#define HARDWARE_V02
+#define SWAP_PINS true
+#endif
+
 #define DEBUG_BAUD_RATE 115200
 
 // We'll look for a HIGH signal on this pin to decide if the heatpump unit is

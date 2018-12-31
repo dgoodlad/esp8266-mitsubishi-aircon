@@ -19,6 +19,7 @@ AsyncMqttClient mqttClient;
 
 HeatPump heatpump;
 
+#ifdef HARDWARE_V02
 // Detects the heatpump by looking for a HIGH signal on HEATPUMP_DETECT_PIN,
 // then configures the system for either condition. If no heatpump is detected,
 // we assume that we're connected via FTDI to a computer for development, so
@@ -53,6 +54,16 @@ bool detectHeatpump() {
 
     return detected;
 }
+#endif
+
+#ifdef HARDWARE_V01
+bool detectHeatpump() {
+    DebugSerial = &Serial1;
+    Serial1.begin(115200);
+    Serial1.setDebugOutput(true);
+    return true;
+}
+#endif
 
 void saveConfigCallback () {
     shouldSaveConfig = true;
@@ -386,7 +397,7 @@ void setup() {
     if (heatPumpDetected) {
         // Talk to the heatpump on GPIO13/15 via UART0 by telling the heatpump
         // class to call `Serial.swap()`
-        heatpump.connect(&Serial, true);
+        heatpump.connect(&Serial, SWAP_PINS);
     }
 }
 
