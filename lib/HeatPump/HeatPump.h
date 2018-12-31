@@ -148,6 +148,7 @@ class HeatPump
     heatpumpStatus currentStatus;
   
     HardwareSerial * _HardSerial;
+    bool swapSerialPins;
     unsigned long lastSend;
     int infoMode;
     unsigned long lastRecv;

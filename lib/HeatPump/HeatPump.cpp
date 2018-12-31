@@ -78,27 +78,24 @@ HeatPump::HeatPump() {
   tempMode = false;
   externalUpdate = false;
   currentStatus = {0, false, {TIMER_MODE_MAP[0], 0, 0, 0, 0}}; // initialise to all off, then it will update shortly after connect
+  swapSerialPins = false;
 }
 
 // Public Methods //////////////////////////////////////////////////////////////
 
 bool HeatPump::connect(HardwareSerial *serial) {
-  return connect(serial, false);
-}
-
-bool HeatPump::connect(HardwareSerial *serial, bool swapPins) {
   if(serial != NULL) {
     _HardSerial = serial;
   }
   connected = false;
   _HardSerial->begin(2400, SERIAL_8E1);
-  if(swapPins) {
+  if(swapSerialPins) {
     _HardSerial->swap();
   }
   if(onConnectCallback) {
     onConnectCallback();
   }
-  
+
   // settle before we start sending packets
   delay(2000);
 
@@ -110,6 +107,11 @@ bool HeatPump::connect(HardwareSerial *serial, bool swapPins) {
   int packetType = readPacket();
   return packetType == RCVD_PKT_CONNECT_SUCCESS;
   //}
+}
+
+bool HeatPump::connect(HardwareSerial *serial, bool swapPins) {
+  swapSerialPins = swapPins;
+  return connect(serial);
 }
 
 bool HeatPump::update() {
