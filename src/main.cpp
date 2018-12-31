@@ -306,8 +306,20 @@ void handleClearSettingsButton() {
 
 void publishSystemBootInfo() {
     char buffer[256];
+    rst_info *reset_info = ESP.getResetInfoPtr();
     snprintf(buffer, 256, "Reset reason: %s", ESP.getResetReason().c_str());
     mqttClient.publish(mqtt_topic_info, 0, false, buffer);
+    if (reset_info->reason == REASON_EXCEPTION_RST) {
+        snprintf(buffer, 256, "Fatal exception: (%d):\n", reset_info->exccause);
+        mqttClient.publish(mqtt_topic_info, 0, false, buffer);
+        snprintf(buffer, 256, "epc1=0x%08x, epc2=0x%08x, epc3=0x%08x, excvaddr=0x%08x, depc=0x%08x",
+                 reset_info->epc1,
+                 reset_info->epc2,
+                 reset_info->epc3,
+                 reset_info->excvaddr,
+                 reset_info->depc);
+        mqttClient.publish(mqtt_topic_info, 0, false, buffer);
+    }
     snprintf(buffer, 256, "Chip ID: %08x", ESP.getChipId());
     mqttClient.publish(mqtt_topic_info, 0, false, buffer);
     snprintf(buffer, 256, "Core: %s\nSDK: %s\nCPU Frequency: %d MHz", ESP.getCoreVersion().c_str(), ESP.getSdkVersion(), ESP.getCpuFreqMHz());
