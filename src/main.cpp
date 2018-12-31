@@ -58,6 +58,14 @@ void saveConfigCallback () {
     shouldSaveConfig = true;
 }
 
+void heatpumpPacketCallback(byte *packet, int length, char* message) {
+    DebugSerial->printf("%s %d bytes: ", message, length);
+    for (int i = 0; i < length; i++) {
+        DebugSerial->printf("%02X", *(packet + i));
+    }
+    DebugSerial->println();
+}
+
 void heatpumpSettingsChanged() {
     char temperature[4];
     heatpumpSettings settings = heatpump.getSettings();
@@ -371,6 +379,7 @@ void setup() {
     mqttClient.setWill(mqtt_topic_availability, 2, true, "offline");
     mqttClient.connect();
 
+    heatpump.setPacketCallback(heatpumpPacketCallback);
     heatpump.setSettingsChangedCallback(heatpumpSettingsChanged);
     heatpump.setStatusChangedCallback(heatpumpStatusChanged);
 
