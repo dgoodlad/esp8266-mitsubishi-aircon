@@ -62,21 +62,21 @@ void heatpumpSettingsChanged() {
     char temperature[4];
     heatpumpSettings settings = heatpump.getSettings();
     snprintf(temperature, 4, "%3.0f", settings.temperature);
-    DebugSerial->printf("PUB power state %s\n", settings.power.c_str());
-    mqttClient.publish(mqtt_topic_power_state, 0, true, settings.power.c_str());
+    DebugSerial->printf("PUB power state %s\n", settings.power);
+    mqttClient.publish(mqtt_topic_power_state, 0, true, settings.power);
     if (heatpump.getPowerSettingBool()) {
-        DebugSerial->printf("PUB mode state %s\n", settings.mode.c_str());
-        mqttClient.publish(mqtt_topic_mode_state, 0, true, settings.mode.c_str());
+        DebugSerial->printf("PUB mode state %s\n", settings.mode);
+        mqttClient.publish(mqtt_topic_mode_state, 0, true, settings.mode);
     } else {
         DebugSerial->printf("PUB mode state OFF\n");
         mqttClient.publish(mqtt_topic_mode_state, 0, true, "OFF");
     }
     DebugSerial->printf("PUB temperature %s\n", temperature);
     mqttClient.publish(mqtt_topic_temperature_state, 0, true, temperature);
-    DebugSerial->printf("PUB fan state %s\n", settings.fan.c_str());
-    mqttClient.publish(mqtt_topic_fan_state, 0, true, settings.fan.c_str());
-    DebugSerial->printf("PUB vane state %s\n", settings.vane.c_str());
-    mqttClient.publish(mqtt_topic_vane_state, 0, true, settings.vane.c_str());
+    DebugSerial->printf("PUB fan state %s\n", settings.fan);
+    mqttClient.publish(mqtt_topic_fan_state, 0, true, settings.fan);
+    DebugSerial->printf("PUB vane state %s\n", settings.vane);
+    mqttClient.publish(mqtt_topic_vane_state, 0, true, settings.vane);
 }
 
 void heatpumpStatusChanged(heatpumpStatus status) {
@@ -153,7 +153,7 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
         upcase(payload, len, buffer, buflen);
         DebugSerial->printf("SET power setting to %s\n", buffer);
         if (validatePowerValue(buffer)) {
-            heatpump.setPowerSetting(String(buffer));
+            heatpump.setPowerSetting(buffer);
         }
     } else if(strcmp(topic, mqtt_topic_mode_command) == 0) {
         upcase(payload, len, buffer, buflen);
@@ -180,6 +180,7 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
             heatpump.setVaneSetting(buffer);
         }
     }
+    heatpump.update();
 }
 
 void setupClearSettingsButtonHandler() {
