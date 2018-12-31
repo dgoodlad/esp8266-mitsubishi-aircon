@@ -174,33 +174,42 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
         DebugSerial->printf("SET power setting to %s\n", buffer);
         if (validatePowerValue(buffer)) {
             heatpump.setPowerSetting(buffer);
+            updateHeatpump = true;
+            lastHeatpumpSettingsChange = millis();
         }
     } else if(strcmp(topic, mqtt_topic_mode_command) == 0) {
         upcase(payload, len, buffer, buflen);
         DebugSerial->printf("SET mode setting to %s\n", buffer);
         if (validateModeValue(buffer)) {
             heatpump.setModeSetting(buffer);
+            updateHeatpump = true;
+            lastHeatpumpSettingsChange = millis();
         }
     } else if(strcmp(topic, mqtt_topic_temperature_command) == 0) {
         upcase(payload, len, buffer, buflen);
         DebugSerial->printf("SET temperature to %f\n", atof(buffer));
         if (validateTemperatureValue(buffer)) {
             heatpump.setTemperature(atof(buffer));
+            updateHeatpump = true;
+            lastHeatpumpSettingsChange = millis();
         }
     } else if(strcmp(topic, mqtt_topic_fan_command) == 0) {
         upcase(payload, len, buffer, buflen);
         DebugSerial->printf("SET fan speed to %s\n", buffer);
         if (validateFanValue(buffer)) {
             heatpump.setFanSpeed(buffer);
+            updateHeatpump = true;
+            lastHeatpumpSettingsChange = millis();
         }
     } else if(strcmp(topic, mqtt_topic_vane_command) == 0) {
         upcase(payload, len, buffer, buflen);
         DebugSerial->printf("SET vane to %s\n", buffer);
         if (validateVaneValue(buffer)) {
             heatpump.setVaneSetting(buffer);
+            updateHeatpump = true;
+            lastHeatpumpSettingsChange = millis();
         }
     }
-    heatpump.update();
 }
 
 void setupClearSettingsButtonHandler() {
@@ -425,6 +434,11 @@ void loop() {
     ArduinoOTA.handle();
 
     if (heatPumpDetected) {
+        if (updateHeatpump && millis() - lastHeatpumpSettingsChange > 500) {
+            updateHeatpump = false;
+            heatpump.update();
+            delay(100);
+        }
         heatpump.sync();
     }
 
