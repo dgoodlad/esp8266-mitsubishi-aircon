@@ -61,6 +61,10 @@ bool detectHeatpump() {
     DebugSerial = &Serial1;
     Serial1.begin(115200);
     Serial1.setDebugOutput(true);
+
+    pinMode(HEATPUMP_ENABLE_PIN, OUTPUT);
+    digitalWrite(HEATPUMP_ENABLE_PIN, HIGH);
+
     return true;
 }
 #endif
