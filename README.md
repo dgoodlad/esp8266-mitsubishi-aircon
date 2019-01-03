@@ -85,7 +85,13 @@ You'll need the following to build the PCB:
 | SW1          | 1     | KMR2        | SMD tactile push-button switch              | [link](https://www.ckswitches.com/media/1479/kmr2.pdf)              |                                                                                                                                 | [135-9490](https://au.rs-online.com/web/p/tactile-switches/1359490/)                       |
 | U1           | 1     | TXB0104DR   | 4-channel logic level shifter, SOIC package | [link](http://www.ti.com/lit/ds/symlink/txb0104.pdf)                | [296-21928-1-ND](https://www.digikey.com.au/product-detail/en/texas-instruments/TXB0104DR/296-21928-1-ND/1629281)               |                                                                                            |
 
-You should be able to pick these parts up for under AUD25, but YMMV.
+You should be able to pick these parts up for under AUD25, but YMMV. I've linked
+to the vendors that I used (Digikey & RS Components) in Australia. I used two
+sources because I was ordering parts as I experimented, and RS does free
+shipping within Australia on _any order size_ while Digikey requires a minimum
+order value. None of these parts are particularly special, and you should be
+fine swapping out resistors, caps etc so long as you keep the values (especially
+for the voltage divider R1/R2).
 
 ### Cabling
 
