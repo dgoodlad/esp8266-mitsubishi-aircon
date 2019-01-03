@@ -446,7 +446,9 @@ void setup() {
     mqttClient.setWill(mqtt_topic_availability, 2, true, "offline");
     mqttClient.connect();
 
+    #ifdef PACKET_DEBUG
     heatpump.setPacketCallback(heatpumpPacketCallback);
+    #endif
     heatpump.setSettingsChangedCallback(heatpumpSettingsChanged);
     heatpump.setStatusChangedCallback(heatpumpStatusChanged);
 
