@@ -59,7 +59,8 @@ as a good place to start! Importantly, that page notes that
 ![PCB Layout (bottom-side)](docs/images/pcb-layout-bottom.png?raw=true)
 
 I used [OSH Park](https://oshpark.com/) to fabricate these PCBs, it cost about
-10 USD with free shipping to 🇦🇺Australia🇦🇺 for three boards.
+10 USD with free shipping to 🇦🇺Australia🇦🇺 for three boards. I've made a shared
+project there if you'd like to order the boards quickly: [](https://oshpark.com/shared_projects/LMoDw6sM)
 
 Note that the HUZZAH is **revA** with _11 pin connectors_, not the newer 10-pin
 version. The 11-pin version is just what I had a few of lying around, and they
@@ -84,3 +85,58 @@ You'll need the following to build the PCB:
 | U1           | 1     | TXB0104DR   | 4-channel logic level shifter, SOIC package | [link](http://www.ti.com/lit/ds/symlink/txb0104.pdf)                |
 
 You should be able to pick these parts up for under AUD25, but YMMV.
+
+### Cabling
+
+To connect the PCB to your air conditioner, you need to make an appropriate
+cable.
+
+On the aircon end, they use a [JST
+PA-series](http://www.jst-mfg.com/product/pdf/eng/ePA-F.pdf) 5-conductor
+connector, of which we only need four (pin 1 is a +12V output that is
+unnecessary here).
+
+On the PCB, I've used a [JST
+PH-series](http://www.jst-mfg.com/product/pdf/eng/ePH.pdf) 4-conductor
+connector. 
+
+You'll need the following parts to build a cable:
+
+| Part Number    | Qty | Description                             | Notes                        |
+| -----------    | --- | -----------                             | -----                        |
+| SPHD-002T-0.5  | 4   | PA-series crimp connector               | BPHD-002T-0.5 is equivalent  |
+| PAP-05V-S      | 1   | PA-series connector housing (5-circuit) |                              |
+| SPH-002T-P0.5S | 4   | PH-series crimp connector               | BPH-002T-P0.5S is equivalent |
+| PHR-4          | 1   | PH-series connector housing (4-circuit) |                              |
+
+... and four wires (or a 4-core cable) that meets the requirements of both crimp
+connectors. That means anything 28-24 AWG, with insulation outside diameter
+between 0.8mm-1.5mm.
+
+Note that the crimp connectors _may_ be offered in a `B`-prefixed part number
+instead of `S`; they'll be fine, too, they're just packaged as individual parts
+in bags rather than on a long metal strip.
+
+I used an Engineer PA-09 crimper for these parts; they're small and finnicky but
+once you get the hang of it they're do-able. Some vendors sell pre-crimped leads
+if you want to skip crimping (at least on one end). If I re-design the board in
+the future, I'd put a PA connector on that end for consistency and for
+availability of pre-made leads.
+
+The wiring is simple, as I've kept the pin order from the aircon unit:
+
+``` text
+    Aircon                      PCB
+Signal | Pin                 Pin | Signal
+   12V | 1 * (NC)
+   GND | 2 * ----------------* 1 | GND
+    5V | 3 * ----------------* 2 | 5V
+    TX | 4 * ----------------* 3 | RX
+    RX | 5 * ----------------* 4 | TX
+```
+
+For convenience, here are the diagrams of the two connector housings from their
+respective datasheets:
+
+![PA Connector](docs/images/pa-connector.png?raw=true)
+![PH Connector](docs/images/ph-connector.png?raw=true)
