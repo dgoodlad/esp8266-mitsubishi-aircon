@@ -246,20 +246,35 @@ void loadConfig() {
 }
 
 void setupWifiManager() {
+    wifiManager = new WiFiManager(*DebugSerial);
+
     custom_mqtt_host = new WiFiManagerParameter("mqtt_host", "MQTT Host", settings.mqtt_host, MAX_LENGTH_MQTT_HOST);
     custom_mqtt_port = new WiFiManagerParameter("mqtt_port", "MQTT Port", settings.mqtt_port, MAX_LENGTH_MQTT_PORT);
     custom_mqtt_username = new WiFiManagerParameter("mqtt_username", "MQTT Username", settings.mqtt_username, MAX_LENGTH_MQTT_USERNAME);
     custom_mqtt_password = new WiFiManagerParameter("mqtt_password", "MQTT Password", settings.mqtt_password, MAX_LENGTH_MQTT_PASSWORD);
     custom_mqtt_topic_prefix = new WiFiManagerParameter("mqtt_topic_prefis", "MQTT Topic Prefix", settings.mqtt_topic_prefix, MAX_LENGTH_MQTT_TOPIC_PREFIX);
 
-    wifiManager = new WiFiManager(*DebugSerial);
-
-    wifiManager->setSaveConfigCallback(saveConfigCallback);
+    // Configure custom parameters for wifimanager to collect in the
+    // configuration page
     wifiManager->addParameter(custom_mqtt_host);
     wifiManager->addParameter(custom_mqtt_port);
     wifiManager->addParameter(custom_mqtt_username);
     wifiManager->addParameter(custom_mqtt_password);
     wifiManager->addParameter(custom_mqtt_topic_prefix);
+    wifiManager->setSaveParamsCallback(saveConfigCallback);
+
+    // Timeout after 5 minutes so that a "blip" in the wifi doesn't leave the
+    // device hung in captive portal mode
+    wifiManager->setConfigPortalTimeout(5 * 60);
+
+    // Enable WifiManager's debug output
+    //wifiManager->setDebugOutput(true);
+
+    // Restore built-in ESP8266 persistent wifi settings
+    wifiManager->setRestorePersistent(true);
+
+    // Automatically attempt to reconnect wifi
+    wifiManager->setWiFiAutoReconnect(true);
 
     // Dark theme
     wifiManager->setClass("invert");
