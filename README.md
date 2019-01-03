@@ -72,17 +72,18 @@ to modify the board layout to use the newer 10-pin version instead.
 
 You'll need the following to build the PCB:
 
-| Reference(s) | Qty   | Value       | Description                                 | Datasheet                                                           |
-| ------------ | ----- | ----------- | -----------                                 | ---------                                                           |
-| A1           | 1     | HUZZAH      | Adafruit HUZZAH (revA) breakout             | [link](https://learn.adafruit.com/adafruit-huzzah-esp8266-breakout) |
-| C1, C2       | 2     | 0.1uF       | SMD 0603 Ceramic Capacitor                  | [link]()                                                            |
-| J1           | 1     | AIRCON      | JST PH 4-pin Male Connector                 | [link](http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)              |
-| J2           | 1     | DEBUG       | 2-pin 0.1" pin header (male)                | [link]()                                                            |
-| R1           | 1     | 2K2         | SMD 0603 Resistor                           | [link]()                                                            |
-| R2           | 1     | 3K3         | SMD 0603 Resistor                           | [link]()                                                            |
-| R3, R4       | 2     | 1K          | SMD 0603 Resistor                           | [link]()                                                            |
-| SW1          | 1     | KMR2        | SMD tactile push-button switch              | [link](https://www.ckswitches.com/media/1479/kmr2.pdf)              |
-| U1           | 1     | TXB0104DR   | 4-channel logic level shifter, SOIC package | [link](http://www.ti.com/lit/ds/symlink/txb0104.pdf)                |
+| Reference(s) | Qty   | Value       | Description                                 | Datasheet                                                           | Digikey Part Number                                                                                                             | RS Components P/N                                                                          |
+| ------------ | ----- | ----------- | -----------                                 | ---------                                                           | --------------------                                                                                                            | --------------------                                                                       |
+| A1           | 1     | HUZZAH      | Adafruit HUZZAH (revA) breakout             | [link](https://learn.adafruit.com/adafruit-huzzah-esp8266-breakout) | [1528-1223-ND](https://www.digikey.com.au/product-detail/en/adafruit-industries-llc/2471/1528-1223-ND/5355489)                  |                                                                                            |
+| C1, C2       | 2     | 0.1uF       | SMD 0603 Ceramic Capacitor                  | [link]()                                                            | [1276-6994-1-ND](https://www.digikey.com.au/product-detail/en/samsung-electro-mechanics/CL10B104KB85PNL/1276-6994-1-ND/7320636) |                                                                                            |
+| J1           | 1     | AIRCON      | JST PH 4-pin Male Connector                 | [link](http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)              | [455-1721-ND](https://www.digikey.com.au/product-detail/en/jst-sales-america-inc/S4B-PH-K-S(LF)(SN)/455-1721-ND/926628)         |                                                                                            |
+| J2           | 1     | DEBUG       | 2-pin 0.1" pin header (male)                | [link]()                                                            | [S7000-ND](https://www.digikey.com.au/product-detail/en/sullins-connector-solutions/PPTC021LFBN-RC/S7000-ND/810142)             |                                                                                            |
+| n/a          | 2     | 11-PIN      | 11-pin 0.1" pin header (female)             | [link]()                                                            | [S7009-ND](https://www.digikey.com.au/product-detail/en/sullins-connector-solutions/PPTC111LFBN-RC/S7009-ND/810150)             |                                                                                            |
+| R1           | 1     | 2K2         | SMD 0603 Resistor                           | [link]()                                                            |                                                                                                                                 | [679-0112](https://au.rs-online.com/web/p/surface-mount-fixed-resistors/6790112/?sra=pstk) |
+| R2           | 1     | 3K3         | SMD 0603 Resistor                           | [link]()                                                            |                                                                                                                                 | [679-0311](https://au.rs-online.com/web/p/surface-mount-fixed-resistors/6790311/?sra=pstk) |
+| R3, R4       | 2     | 1K          | SMD 0603 Resistor                           | [link]()                                                            |                                                                                                                                 | [678-9875](https://au.rs-online.com/web/p/surface-mount-fixed-resistors/6789875/?sra=pstk) |
+| SW1          | 1     | KMR2        | SMD tactile push-button switch              | [link](https://www.ckswitches.com/media/1479/kmr2.pdf)              |                                                                                                                                 | [135-9490](https://au.rs-online.com/web/p/tactile-switches/1359490/)                       |
+| U1           | 1     | TXB0104DR   | 4-channel logic level shifter, SOIC package | [link](http://www.ti.com/lit/ds/symlink/txb0104.pdf)                | [296-21928-1-ND](https://www.digikey.com.au/product-detail/en/texas-instruments/TXB0104DR/296-21928-1-ND/1629281)               |                                                                                            |
 
 You should be able to pick these parts up for under AUD25, but YMMV.
 
@@ -102,14 +103,14 @@ connector.
 
 You'll need the following parts to build a cable:
 
-| Part Number    | Qty | Description                             | Notes                        |
-| -----------    | --- | -----------                             | -----                        |
-| SPHD-002T-0.5  | 4   | PA-series crimp connector               | BPHD-002T-0.5 is equivalent  |
-| PAP-05V-S      | 1   | PA-series connector housing (5-circuit) |                              |
-| SPH-002T-P0.5S | 4   | PH-series crimp connector               | BPH-002T-P0.5S is equivalent |
-| PHR-4          | 1   | PH-series connector housing (4-circuit) |                              |
+| JST Part Number | Qty | Description                             | Notes                        | AU RS Components URL                                           |
+| -----------     | --- | -----------                             | -----                        | --------------------                                           |
+| SPHD-002T-0.5   | 4   | PA-series crimp connector               | BPHD-002T-0.5 is equivalent  | https://au.rs-online.com/web/p/pcb-connector-contacts/9182817/ |
+| PAP-05V-S       | 1   | PA-series connector housing (5-circuit) |                              | https://au.rs-online.com/web/p/pcb-connector-housings/4766798/ |
+| SPH-002T-P0.5S  | 4   | PH-series crimp connector               | BPH-002T-P0.5S is equivalent | https://au.rs-online.com/web/p/pcb-connector-contacts/8201456/ |
+| PHR-4           | 1   | PH-series connector housing (4-circuit) |                              | https://au.rs-online.com/web/p/pcb-connector-housings/8201478/ |
 
-... and four wires (or a 4-core cable) that meets the requirements of both crimp
+... and four wires (or a 4-core cable) that meet the requirements of both crimp
 connectors. That means anything 28-24 AWG, with insulation outside diameter
 between 0.8mm-1.5mm.
 
@@ -117,11 +118,11 @@ Note that the crimp connectors _may_ be offered in a `B`-prefixed part number
 instead of `S`; they'll be fine, too, they're just packaged as individual parts
 in bags rather than on a long metal strip.
 
-I used an Engineer PA-09 crimper for these parts; they're small and finnicky but
-once you get the hang of it they're do-able. Some vendors sell pre-crimped leads
-if you want to skip crimping (at least on one end). If I re-design the board in
-the future, I'd put a PA connector on that end for consistency and for
-availability of pre-made leads.
+I used an Engineer PA-09 crimper for these connectors. They're small and
+finnicky but once you get the hang of it they're do-able. Some vendors sell
+pre-crimped leads if you want to skip crimping (at least on one end). If I
+re-design the board in the future, I'd put a PA connector on that end for
+consistency and for availability of pre-made leads.
 
 The wiring is simple, as I've kept the pin order from the aircon unit:
 
