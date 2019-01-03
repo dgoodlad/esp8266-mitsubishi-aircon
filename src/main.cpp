@@ -217,7 +217,9 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
 }
 
 void setupClearSettingsButtonHandler() {
+    #ifdef CLEAR_SETTINGS_PIN
     clearSettingsButton.attach(CLEAR_SETTINGS_PIN, INPUT);
+    #endif
 }
 
 void loadConfig() {
@@ -480,5 +482,7 @@ void loop() {
         publishSystemStatus();
     }
 
+    #ifdef CLEAR_SETTINGS_PIN
     handleClearSettingsButton();
+    #endif
 }

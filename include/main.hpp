@@ -30,13 +30,15 @@ const char* otaPassword = "aircon";
 // heatpump.
 #ifdef HARDWARE_V01
 #define HEATPUMP_ENABLE_PIN 12
-#endif
-#ifdef HARDWARE_V02
+#elif defined(HARDWARE_V02)
 #define HEATPUMP_ENABLE_PIN 5
 #endif
+
+#ifndef HARDWARE_V01
 // We look for a 3-second LOW value on this pin to trigger a full reset of all
 // settings.
 #define CLEAR_SETTINGS_PIN 12
+#endif
 
 HardwareSerial* DebugSerial = &Serial;
 
