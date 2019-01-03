@@ -93,6 +93,10 @@ order value. None of these parts are particularly special, and you should be
 fine swapping out resistors, caps etc so long as you keep the values (especially
 for the voltage divider R1/R2).
 
+I created a BOM at Digikey with pricing as of 3/1/2019 and have exported it as
+CSV [here](docs/bom-digikey.csv?raw=true). It contains everything you need to
+build the PCB and a cable (except for wire!).
+
 ### Cabling
 
 To connect the PCB to your air conditioner, you need to make an appropriate
