@@ -5,6 +5,8 @@
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 #include <Syslog.h>
+#include <WiFiManager.h>
+#include <Bounce2.h>
 
 const char* otaPassword = "aircon";
 
@@ -50,8 +52,6 @@ unsigned long lastHeatpumpSettingsChange = 0;
 
 #define CONFIG_SPIFFS_PATH "/config.json"
 
-#include <WiFiManager.h>
-#include <Bounce2.h>
 
 #ifndef WIFIMANAGER_AP_PASSWORD
 #define WIFIMANAGER_AP_PASSWORD "espaircon"
