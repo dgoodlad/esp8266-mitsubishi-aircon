@@ -31,26 +31,34 @@ HeatPump heatpump;
 bool detectHeatpump() {
     bool detected;
 
+    if (syslogEnabled) syslog.log(LOG_INFO, "Detecting heatpump (HARDWARE_V02)");
+
     pinMode(HEATPUMP_DETECT_PIN, INPUT);
     pinMode(HEATPUMP_ENABLE_PIN, OUTPUT);
 
     detected = digitalRead(HEATPUMP_DETECT_PIN) == HIGH;
 
     if (detected) {
+        if (syslogEnabled) syslog.log(LOG_INFO, "Heatpump detected? YES.");
         // Output debug info on GPIO2 via UART1
+        if (syslogEnabled) syslog.log(LOG_INFO, "Configuring debug info on UART1");
         DebugSerial = &Serial1;
         Serial1.begin(115200);
         Serial1.setDebugOutput(true);
 
         // Enable the logic level shifter now that we know there's 5V on the far
         // side and that we'll have something to talk to
+        if (syslogEnabled) syslog.log(LOG_INFO, "Enabling logic level shifter");
         digitalWrite(HEATPUMP_ENABLE_PIN, HIGH);
     } else {
+        if (syslogEnabled) syslog.log(LOG_INFO, "Heatpump detected? NO.");
         // Make sure the logic level shifter remains disabled, as it won't be
         // getting any 5V power anyway
+        if (syslogEnabled) syslog.log(LOG_INFO, "Disabling logic level shifter");
         digitalWrite(HEATPUMP_ENABLE_PIN, LOW);
 
         // Output debug info on the default serial TX/RX pins via UART0
+        if (syslogEnabled) syslog.log(LOG_INFO, "Configuring debug info on default pins of UART0");
         DebugSerial = &Serial;
         Serial.begin(115200);
         Serial.setDebugOutput(true);
@@ -62,10 +70,12 @@ bool detectHeatpump() {
 
 #ifdef HARDWARE_V01
 bool detectHeatpump() {
+    if (syslogEnabled) syslog.log(LOG_INFO, "Detecting heatpump (HARDWARE_V01)");
     DebugSerial = &Serial1;
     Serial1.begin(115200);
     Serial1.setDebugOutput(true);
 
+    if (syslogEnabled) syslog.log(LOG_INFO, "Enabling logic level shifter");
     pinMode(HEATPUMP_ENABLE_PIN, OUTPUT);
     digitalWrite(HEATPUMP_ENABLE_PIN, HIGH);
 
@@ -78,42 +88,57 @@ void saveConfigCallback () {
 }
 
 void heatpumpPacketCallback(byte *packet, int length, char* message) {
-    DebugSerial->printf("%s %d bytes: ", message, length);
+    char buffer[256];
+    int offset = 0;
+
+    offset = snprintf(buffer, 256, "%s %d bytes: ", message, length);
     for (int i = 0; i < length; i++) {
-        DebugSerial->printf("%02X", *(packet + i));
+        offset += snprintf(buffer + offset, 256 - offset, "%02X", *(packet + i));
     }
-    DebugSerial->println();
+
+    if (syslogEnabled) syslog.log(LOG_DEBUG, buffer);
+    DebugSerial->println(buffer);
 }
 
 void heatpumpSettingsChanged() {
     char temperature[4];
     heatpumpSettings settings = heatpump.getSettings();
+    if (syslogEnabled) syslog.log(LOG_INFO, "heatpumpSettingsChanged callback");
     snprintf(temperature, 4, "%3.0f", settings.temperature);
+    if (syslogEnabled) syslog.logf(LOG_DEBUG, "PUB power state %s to %s", settings.power, mqtt_topic_power_state);
     DebugSerial->printf("PUB power state %s\n", settings.power);
     mqttClient.publish(mqtt_topic_power_state, 0, true, settings.power);
     if (heatpump.getPowerSettingBool()) {
+        if (syslogEnabled) syslog.logf(LOG_DEBUG, "PUB mode state %s to %s", settings.mode, mqtt_topic_mode_state);
         DebugSerial->printf("PUB mode state %s\n", settings.mode);
         mqttClient.publish(mqtt_topic_mode_state, 0, true, settings.mode);
     } else {
+        if (syslogEnabled) syslog.logf(LOG_DEBUG, "PUB mode state OFF to %s", mqtt_topic_mode_state);
         DebugSerial->printf("PUB mode state OFF\n");
         mqttClient.publish(mqtt_topic_mode_state, 0, true, "OFF");
     }
+    if (syslogEnabled) syslog.logf(LOG_DEBUG, "PUB temperature %s to %s", temperature, mqtt_topic_temperature_state);
     DebugSerial->printf("PUB temperature %s\n", temperature);
     mqttClient.publish(mqtt_topic_temperature_state, 0, true, temperature);
+    if (syslogEnabled) syslog.logf(LOG_DEBUG, "PUB fan state %s to %s", settings.fan, mqtt_topic_fan_state);
     DebugSerial->printf("PUB fan state %s\n", settings.fan);
     mqttClient.publish(mqtt_topic_fan_state, 0, true, settings.fan);
+    if (syslogEnabled) syslog.logf(LOG_DEBUG, "PUB vane state %s to %s", settings.vane, mqtt_topic_vane_state);
     DebugSerial->printf("PUB vane state %s\n", settings.vane);
     mqttClient.publish(mqtt_topic_vane_state, 0, true, settings.vane);
 }
 
 void heatpumpStatusChanged(heatpumpStatus status) {
     char temperature[4];
+    if (syslogEnabled) syslog.log(LOG_INFO, "heatpumpStatusChanged callback");
     snprintf(temperature, 4, "%3.0f", status.roomTemperature);
+    if (syslogEnabled) syslog.logf(LOG_DEBUG, "PUB room temperature %s to %s", temperature, mqtt_topic_current_temperature_state);
     DebugSerial->printf("PUB temperature %s\n", temperature);
     mqttClient.publish(mqtt_topic_current_temperature_state, 0, true, temperature);
 }
 
 void mqttConnect(bool sessionPresent) {
+    if (syslogEnabled) syslog.log(LOG_INFO, "mqttConnect callback");
     mqttClient.subscribe(mqtt_topic_power_command, 0);
     mqttClient.subscribe(mqtt_topic_mode_command, 0);
     mqttClient.subscribe(mqtt_topic_temperature_command, 0);
@@ -177,8 +202,11 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
     char buffer[6];
     size_t buflen = 6;
 
+    if (syslogEnabled) syslog.log(LOG_INFO, "mqttMessage callback");
+
     if(strcmp(topic, mqtt_topic_power_command) == 0) {
         upcase(payload, len, buffer, buflen);
+        if (syslogEnabled) syslog.logf(LOG_INFO, "SET power setting to %s", buffer);
         DebugSerial->printf("SET power setting to %s\n", buffer);
         if (validatePowerValue(buffer)) {
             heatpump.setPowerSetting(buffer);
@@ -187,6 +215,7 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
         }
     } else if(strcmp(topic, mqtt_topic_mode_command) == 0) {
         upcase(payload, len, buffer, buflen);
+        if (syslogEnabled) syslog.logf(LOG_INFO, "SET mode setting to %s", buffer);
         DebugSerial->printf("SET mode setting to %s\n", buffer);
         if (validateModeValue(buffer)) {
             heatpump.setModeSetting(buffer);
@@ -195,6 +224,7 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
         }
     } else if(strcmp(topic, mqtt_topic_temperature_command) == 0) {
         upcase(payload, len, buffer, buflen);
+        if (syslogEnabled) syslog.logf(LOG_INFO, "SET temperature to %f", atof(buffer));
         DebugSerial->printf("SET temperature to %f\n", atof(buffer));
         if (validateTemperatureValue(buffer)) {
             heatpump.setTemperature(atof(buffer));
@@ -203,6 +233,7 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
         }
     } else if(strcmp(topic, mqtt_topic_fan_command) == 0) {
         upcase(payload, len, buffer, buflen);
+        if (syslogEnabled) syslog.logf(LOG_INFO, "SET fan speed to %s", buffer);
         DebugSerial->printf("SET fan speed to %s\n", buffer);
         if (validateFanValue(buffer)) {
             heatpump.setFanSpeed(buffer);
@@ -211,6 +242,7 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
         }
     } else if(strcmp(topic, mqtt_topic_vane_command) == 0) {
         upcase(payload, len, buffer, buflen);
+        if (syslogEnabled) syslog.logf(LOG_INFO, "SET vane to %s", buffer);
         DebugSerial->printf("SET vane to %s\n", buffer);
         if (validateVaneValue(buffer)) {
             heatpump.setVaneSetting(buffer);
@@ -222,6 +254,7 @@ void mqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties pr
 
 void setupClearSettingsButtonHandler() {
     #ifdef CLEAR_SETTINGS_PIN
+    if (syslogEnabled) syslog.logf("Setting up clear-settings pin %d", CLEAR_SETTINGS_PIN);
     clearSettingsButton.attach(CLEAR_SETTINGS_PIN, INPUT);
     #endif
 }
@@ -238,16 +271,26 @@ void loadConfig() {
                 DynamicJsonBuffer jsonBuffer;
                 JsonObject& json = jsonBuffer.parseObject(buf.get());
                 if (json.success()) {
-                    strncpy(settings.mqtt_host, json["mqtt_host"], MAX_LENGTH_MQTT_HOST);
-                    strncpy(settings.mqtt_port, json["mqtt_port"], MAX_LENGTH_MQTT_PORT);
-                    strncpy(settings.mqtt_username, json["mqtt_username"], MAX_LENGTH_MQTT_USERNAME);
-                    strncpy(settings.mqtt_password, json["mqtt_password"], MAX_LENGTH_MQTT_PASSWORD);
-                    strncpy(settings.mqtt_topic_prefix, json["mqtt_topic_prefix"], MAX_LENGTH_MQTT_TOPIC_PREFIX);
-                    strncpy(settings.syslog_host, json["syslog_host"], MAX_LENGTH_SYSLOG_HOST);
-                    strncpy(settings.syslog_port, json["syslog_port"], MAX_LENGTH_SYSLOG_PORT);
-                    strncpy(settings.syslog_device_hostname, json["syslog_device_hostname"], MAX_LENGTH_SYSLOG_DEVICE_HOSTNAME);
-                    strncpy(settings.syslog_app_name, json["syslog_app_name"], MAX_LENGTH_SYSLOG_APP_NAME);
-                    strncpy(settings.syslog_log_level, json["syslog_log_level"], MAX_LENGTH_SYSLOG_LOG_LEVEL);
+                    if (json.containsKey("mqtt_host"))
+                        strncpy(settings.mqtt_host, json["mqtt_host"], MAX_LENGTH_MQTT_HOST);
+                    if (json.containsKey("mqtt_port"))
+                        strncpy(settings.mqtt_port, json["mqtt_port"], MAX_LENGTH_MQTT_PORT);
+                    if (json.containsKey("mqtt_username"))
+                        strncpy(settings.mqtt_username, json["mqtt_username"], MAX_LENGTH_MQTT_USERNAME);
+                    if (json.containsKey("mqtt_password"))
+                        strncpy(settings.mqtt_password, json["mqtt_password"], MAX_LENGTH_MQTT_PASSWORD);
+                    if (json.containsKey("mqtt_topic_prefix"))
+                        strncpy(settings.mqtt_topic_prefix, json["mqtt_topic_prefix"], MAX_LENGTH_MQTT_TOPIC_PREFIX);
+                    if (json.containsKey("syslog_host"))
+                        strncpy(settings.syslog_host, json["syslog_host"], MAX_LENGTH_SYSLOG_HOST);
+                    if (json.containsKey("syslog_port"))
+                        strncpy(settings.syslog_port, json["syslog_port"], MAX_LENGTH_SYSLOG_PORT);
+                    if (json.containsKey("syslog_device_hostname"))
+                        strncpy(settings.syslog_device_hostname, json["syslog_device_hostname"], MAX_LENGTH_SYSLOG_DEVICE_HOSTNAME);
+                    if (json.containsKey("syslog_app_name"))
+                        strncpy(settings.syslog_app_name, json["syslog_app_name"], MAX_LENGTH_SYSLOG_APP_NAME);
+                    if (json.containsKey("syslog_log_level"))
+                        strncpy(settings.syslog_log_level, json["syslog_log_level"], MAX_LENGTH_SYSLOG_LOG_LEVEL);
                 } else {
                     // Failed to load json config
                 }
@@ -321,6 +364,11 @@ void saveConfig() {
     json["mqtt_username"] = settings.mqtt_username;
     json["mqtt_password"] = settings.mqtt_password;
     json["mqtt_topic_prefix"] = settings.mqtt_topic_prefix;
+    json["syslog_host"] = settings.syslog_host;
+    json["syslog_port"] = settings.syslog_port;
+    json["syslog_device_hostname"] = settings.syslog_device_hostname;
+    json["syslog_app_name"] = settings.syslog_app_name;
+    json["syslog_log_level"] = settings.syslog_log_level;
 
     File configFile = SPIFFS.open(CONFIG_SPIFFS_PATH, "w");
     if (!configFile) {
@@ -335,9 +383,11 @@ void saveConfig() {
 void handleClearSettingsButton() {
     clearSettingsButton.update();
     if (clearSettingsButton.read() == LOW && clearSettingsButton.duration() > 3000) {
+        if (syslogEnabled) syslog.log(LOG_WARNING, "Resetting to factory settings");
         DebugSerial->println("Resetting to factory settings");
         wifiManager->resetSettings();
         SPIFFS.remove(CONFIG_SPIFFS_PATH);
+        if (syslogEnabled) syslog.log(LOG_WARNING, "Restarting...");
         DebugSerial->println("Restarting...");
         ESP.restart();
         delay(5000);
@@ -351,6 +401,7 @@ void publishSystemBootInfo() {
     mqttClient.publish(mqtt_topic_info, 0, false, buffer);
     if (reset_info->reason == REASON_EXCEPTION_RST) {
         snprintf(buffer, 256, "Fatal exception: (%d):\n", reset_info->exccause);
+        if (syslogEnabled) syslog.log(LOG_INFO, buffer);
         mqttClient.publish(mqtt_topic_info, 0, false, buffer);
         snprintf(buffer, 256, "epc1=0x%08x, epc2=0x%08x, epc3=0x%08x, excvaddr=0x%08x, depc=0x%08x",
                  reset_info->epc1,
@@ -358,19 +409,24 @@ void publishSystemBootInfo() {
                  reset_info->epc3,
                  reset_info->excvaddr,
                  reset_info->depc);
+        if (syslogEnabled) syslog.log(LOG_INFO, buffer);
         mqttClient.publish(mqtt_topic_info, 0, false, buffer);
     }
     snprintf(buffer, 256, "Chip ID: %08x", ESP.getChipId());
+    if (syslogEnabled) syslog.log(LOG_INFO, buffer);
     mqttClient.publish(mqtt_topic_info, 0, false, buffer);
     snprintf(buffer, 256, "Core: %s\nSDK: %s\nCPU Frequency: %d MHz", ESP.getCoreVersion().c_str(), ESP.getSdkVersion(), ESP.getCpuFreqMHz());
+    if (syslogEnabled) syslog.log(LOG_INFO, buffer);
     mqttClient.publish(mqtt_topic_info, 0, false, buffer);
     snprintf(buffer, 256, "Sketch size: %d\nSketch free: %d\nSketch MD5: %s", ESP.getSketchSize(), ESP.getFreeSketchSpace(), ESP.getSketchMD5().c_str());
+    if (syslogEnabled) syslog.log(LOG_INFO, buffer);
     mqttClient.publish(mqtt_topic_info, 0, false, buffer);
 }
 
 void publishSystemStatus() {
     char buffer[256];
     snprintf(buffer, 256, "Uptime: %d mins\nFree heap: %d", (int) (millis() / 60000), ESP.getFreeHeap());
+    if (syslogEnabled) syslog.log(LOG_INFO, buffer);
     mqttClient.publish(mqtt_topic_info, 0, false, buffer);
 }
 
