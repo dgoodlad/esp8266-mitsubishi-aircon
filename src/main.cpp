@@ -15,6 +15,10 @@
 
 bool shouldSaveConfig = false;
 
+WiFiUDP udpClient;
+bool syslogEnabled = false;
+Syslog syslog(udpClient, SYSLOG_PROTO_IETF);
+
 AsyncMqttClient mqttClient;
 
 HeatPump heatpump;
@@ -239,6 +243,11 @@ void loadConfig() {
                     strncpy(settings.mqtt_username, json["mqtt_username"], MAX_LENGTH_MQTT_USERNAME);
                     strncpy(settings.mqtt_password, json["mqtt_password"], MAX_LENGTH_MQTT_PASSWORD);
                     strncpy(settings.mqtt_topic_prefix, json["mqtt_topic_prefix"], MAX_LENGTH_MQTT_TOPIC_PREFIX);
+                    strncpy(settings.syslog_host, json["syslog_host"], MAX_LENGTH_SYSLOG_HOST);
+                    strncpy(settings.syslog_port, json["syslog_port"], MAX_LENGTH_SYSLOG_PORT);
+                    strncpy(settings.syslog_device_hostname, json["syslog_device_hostname"], MAX_LENGTH_SYSLOG_DEVICE_HOSTNAME);
+                    strncpy(settings.syslog_app_name, json["syslog_app_name"], MAX_LENGTH_SYSLOG_APP_NAME);
+                    strncpy(settings.syslog_log_level, json["syslog_log_level"], MAX_LENGTH_SYSLOG_LOG_LEVEL);
                 } else {
                     // Failed to load json config
                 }
@@ -259,6 +268,11 @@ void setupWifiManager() {
     custom_mqtt_username = new WiFiManagerParameter("mqtt_username", "MQTT Username", settings.mqtt_username, MAX_LENGTH_MQTT_USERNAME);
     custom_mqtt_password = new WiFiManagerParameter("mqtt_password", "MQTT Password", settings.mqtt_password, MAX_LENGTH_MQTT_PASSWORD);
     custom_mqtt_topic_prefix = new WiFiManagerParameter("mqtt_topic_prefis", "MQTT Topic Prefix", settings.mqtt_topic_prefix, MAX_LENGTH_MQTT_TOPIC_PREFIX);
+    custom_syslog_host = new WiFiManagerParameter("syslog_host", "SYSLOG Host", settings.syslog_host, MAX_LENGTH_SYSLOG_HOST);
+    custom_syslog_port = new WiFiManagerParameter("syslog_port", "SYSLOG Port", settings.syslog_port, MAX_LENGTH_SYSLOG_PORT);
+    custom_syslog_device_hostname = new WiFiManagerParameter("syslog_device_hostname", "Syslog Device Hostname", settings.syslog_device_hostname, MAX_LENGTH_SYSLOG_DEVICE_HOSTNAME);
+    custom_syslog_app_name = new WiFiManagerParameter("syslog_app_name", "Syslog App Name", settings.syslog_app_name, MAX_LENGTH_SYSLOG_APP_NAME);
+    custom_syslog_log_level = new WiFiManagerParameter("syslog_log_level", "Syslog Log Level", settings.syslog_log_level, MAX_LENGTH_SYSLOG_LOG_LEVEL);
 
     // Configure custom parameters for wifimanager to collect in the
     // configuration page
@@ -267,6 +281,11 @@ void setupWifiManager() {
     wifiManager->addParameter(custom_mqtt_username);
     wifiManager->addParameter(custom_mqtt_password);
     wifiManager->addParameter(custom_mqtt_topic_prefix);
+    wifiManager->addParameter(custom_syslog_host);
+    wifiManager->addParameter(custom_syslog_port);
+    wifiManager->addParameter(custom_syslog_device_hostname);
+    wifiManager->addParameter(custom_syslog_app_name);
+    wifiManager->addParameter(custom_syslog_log_level);
     wifiManager->setSaveParamsCallback(saveConfigCallback);
 
     // Timeout after 5 minutes so that a "blip" in the wifi doesn't leave the
@@ -391,38 +410,82 @@ void setup() {
             type = "filesystem";
         }
 
+        if (syslogEnabled) syslog.logf(LOG_WARNING, "OTA Update starting (%s)", type.c_str());
         DebugSerial->println("Start updating " + type);
     });
     ArduinoOTA.onEnd([]() {
+        if (syslogEnabled) syslog.log(LOG_WARNING, "OTA Update: COMPLETE");
         DebugSerial->println("\nEnd updating");
         delay(500);
     });
     ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-        if (progress > 0 && total > 0)
+        if (progress > 0 && total > 0) {
+            if (syslogEnabled) syslog.logf(LOG_WARNING, "OTA Update Progress: %u%%", (progress / (total / 100)));
             DebugSerial->printf("Progress: %u%%\r", (progress / (total / 100)));
+        }
     });
     ArduinoOTA.onError([](ota_error_t error) {
         DebugSerial->printf("Error[%u]: ", error);
         if (error == OTA_AUTH_ERROR) {
+            if (syslogEnabled) syslog.log(LOG_ERR, "OTA Update Error: Auth Failed");
             DebugSerial->println("Auth Failed");
         } else if (error == OTA_BEGIN_ERROR) {
+            if (syslogEnabled) syslog.log(LOG_ERR, "OTA Update Error: Begin Failed");
             DebugSerial->println("Begin Failed");
         } else if (error == OTA_CONNECT_ERROR) {
+            if (syslogEnabled) syslog.log(LOG_ERR, "OTA Update Error: Connect Failed");
             DebugSerial->println("Connect Failed");
         } else if (error == OTA_RECEIVE_ERROR) {
+            if (syslogEnabled) syslog.log(LOG_ERR, "OTA Update Error: Receive Failed");
             DebugSerial->println("Receive Failed");
         } else if (error == OTA_END_ERROR) {
+            if (syslogEnabled) syslog.log(LOG_ERR, "OTA Update Error: End Failed");
             DebugSerial->println("End Failed");
         }
     });
     ArduinoOTA.setPassword(otaPassword);
     ArduinoOTA.begin();
 
+    if (syslogEnabled) syslog.log(LOG_INFO, "Loading config");
+
     strncpy(settings.mqtt_host, custom_mqtt_host->getValue(), MAX_LENGTH_MQTT_HOST);
     strncpy(settings.mqtt_port, custom_mqtt_port->getValue(), MAX_LENGTH_MQTT_PORT);
     strncpy(settings.mqtt_username, custom_mqtt_username->getValue(), MAX_LENGTH_MQTT_USERNAME);
     strncpy(settings.mqtt_password, custom_mqtt_password->getValue(), MAX_LENGTH_MQTT_PASSWORD);
     strncpy(settings.mqtt_topic_prefix, custom_mqtt_topic_prefix->getValue(), MAX_LENGTH_MQTT_TOPIC_PREFIX);
+    strncpy(settings.syslog_host, custom_syslog_host->getValue(), MAX_LENGTH_SYSLOG_HOST);
+    strncpy(settings.syslog_port, custom_syslog_port->getValue(), MAX_LENGTH_SYSLOG_PORT);
+    strncpy(settings.syslog_device_hostname, custom_syslog_device_hostname->getValue(), MAX_LENGTH_SYSLOG_DEVICE_HOSTNAME);
+    strncpy(settings.syslog_app_name, custom_syslog_app_name->getValue(), MAX_LENGTH_SYSLOG_APP_NAME);
+    strncpy(settings.syslog_log_level, custom_syslog_log_level->getValue(), MAX_LENGTH_SYSLOG_LOG_LEVEL);
+
+    // Fire up syslog if configured
+    if (strncmp(settings.syslog_host, "", MAX_LENGTH_SYSLOG_HOST) != 0) {
+        syslogEnabled = true;
+        syslog.server(settings.syslog_host, atoi(settings.syslog_port));
+        syslog.deviceHostname(settings.syslog_device_hostname);
+        syslog.appName(settings.syslog_app_name);
+        syslog.defaultPriority(LOG_LOCAL0);
+        if (strncmp(settings.syslog_log_level, "EMERG", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+            syslog.logMask(LOG_UPTO(LOG_EMERG));
+        } else if (strncmp(settings.syslog_log_level, "ALERT", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+            syslog.logMask(LOG_UPTO(LOG_ALERT));
+        } else if (strncmp(settings.syslog_log_level, "CRIT", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+            syslog.logMask(LOG_UPTO(LOG_CRIT));
+        } else if (strncmp(settings.syslog_log_level, "ERR", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+            syslog.logMask(LOG_UPTO(LOG_ERR));
+        } else if (strncmp(settings.syslog_log_level, "ERR", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+            syslog.logMask(LOG_UPTO(LOG_ERR));
+        } else if (strncmp(settings.syslog_log_level, "WARNING", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+            syslog.logMask(LOG_UPTO(LOG_WARNING));
+        } else if (strncmp(settings.syslog_log_level, "NOTICE", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+            syslog.logMask(LOG_UPTO(LOG_NOTICE));
+        } else if (strncmp(settings.syslog_log_level, "INFO", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+            syslog.logMask(LOG_UPTO(LOG_INFO));
+        } else if (strncmp(settings.syslog_log_level, "DEBUG", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+            syslog.logMask(LOG_UPTO(LOG_DEBUG));
+        }
+    }
 
     if (shouldSaveConfig) {
         saveConfig();
@@ -443,13 +506,16 @@ void setup() {
     snprintf(mqtt_topic_fan_command, 128, "%s/fan/set", settings.mqtt_topic_prefix);
     snprintf(mqtt_topic_vane_command, 128, "%s/vane/set", settings.mqtt_topic_prefix);
 
+    if (syslogEnabled) syslog.logf(LOG_INFO, "mqttClient.setServer: %s %d", settings.mqtt_host, atoi(settings.mqtt_port));
     mqttClient.setServer(settings.mqtt_host, atoi(settings.mqtt_port));
     if (strlen(settings.mqtt_username) > 0) {
+        if (syslogEnabled) syslog.log(LOG_INFO, "mqttClient.setCredentials: xxx xxx");
         mqttClient.setCredentials(settings.mqtt_username, settings.mqtt_password);
     }
     mqttClient.onMessage(mqttMessage);
     mqttClient.onConnect(mqttConnect);
     mqttClient.setWill(mqtt_topic_availability, 2, true, "offline");
+    if (syslogEnabled) syslog.log(LOG_INFO, "mqttClient.connect()");
     mqttClient.connect();
 
     #ifdef PACKET_DEBUG
@@ -459,6 +525,7 @@ void setup() {
     heatpump.setStatusChangedCallback(heatpumpStatusChanged);
 
     if (heatPumpDetected) {
+        if (syslogEnabled) syslog.log(LOG_INFO, "Heatpump: DETECTED. Connecting!");
         heatpump.connect(&Serial, SWAP_PINS);
     }
 }
@@ -466,19 +533,23 @@ void setup() {
 unsigned long lastSystemStatusTime = 0;
 
 void loop() {
+    if (syslogEnabled) syslog.log(LOG_DEBUG, "ArduinoOTA.handle()");
     ArduinoOTA.handle();
 
     if (heatPumpDetected) {
         if (updateHeatpump && millis() - lastHeatpumpSettingsChange > 500) {
             updateHeatpump = false;
+            if (syslogEnabled) syslog.log(LOG_DEBUG, "heatpump.update()");
             heatpump.update();
             delay(100);
         }
+        if (syslogEnabled) syslog.log(LOG_DEBUG, "heatpump.sync()");
         heatpump.sync();
     }
 
     if (millis() - lastSystemStatusTime > 60000) {
         lastSystemStatusTime = millis();
+        if (syslogEnabled) syslog.log(LOG_DEBUG, "publishSystemStatus()");
         publishSystemStatus();
     }
 

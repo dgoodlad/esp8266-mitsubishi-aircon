@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
+#include <Syslog.h>
 
 const char* otaPassword = "aircon";
 
@@ -61,6 +62,11 @@ unsigned long lastHeatpumpSettingsChange = 0;
 #define MAX_LENGTH_MQTT_USERNAME 64
 #define MAX_LENGTH_MQTT_PASSWORD 64
 #define MAX_LENGTH_MQTT_TOPIC_PREFIX 32
+#define MAX_LENGTH_SYSLOG_HOST 128
+#define MAX_LENGTH_SYSLOG_PORT 6
+#define MAX_LENGTH_SYSLOG_DEVICE_HOSTNAME 32
+#define MAX_LENGTH_SYSLOG_APP_NAME 32
+#define MAX_LENGTH_SYSLOG_LOG_LEVEL 8
 
 typedef struct {
     char mqtt_host[MAX_LENGTH_MQTT_HOST] = "";
@@ -68,6 +74,11 @@ typedef struct {
     char mqtt_username[MAX_LENGTH_MQTT_USERNAME] = "";
     char mqtt_password[MAX_LENGTH_MQTT_PASSWORD] = "";
     char mqtt_topic_prefix[MAX_LENGTH_MQTT_TOPIC_PREFIX] = "";
+    char syslog_host[MAX_LENGTH_SYSLOG_HOST] = "";
+    char syslog_port[MAX_LENGTH_SYSLOG_PORT] = "514";
+    char syslog_device_hostname[MAX_LENGTH_SYSLOG_DEVICE_HOSTNAME] = "";
+    char syslog_app_name[MAX_LENGTH_SYSLOG_APP_NAME] = "aircon";
+    char syslog_log_level[MAX_LENGTH_SYSLOG_LOG_LEVEL] = "INFO";
 } Settings;
 
 WiFiManagerParameter *custom_mqtt_host;
@@ -75,6 +86,11 @@ WiFiManagerParameter *custom_mqtt_port;
 WiFiManagerParameter *custom_mqtt_username;
 WiFiManagerParameter *custom_mqtt_password;
 WiFiManagerParameter *custom_mqtt_topic_prefix;
+WiFiManagerParameter *custom_syslog_host;
+WiFiManagerParameter *custom_syslog_port;
+WiFiManagerParameter *custom_syslog_device_hostname;
+WiFiManagerParameter *custom_syslog_app_name;
+WiFiManagerParameter *custom_syslog_log_level;
 WiFiManager *wifiManager;
 
 Settings settings;
