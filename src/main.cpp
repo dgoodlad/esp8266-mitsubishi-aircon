@@ -523,24 +523,26 @@ void setup() {
         syslog.deviceHostname(settings.syslog_device_hostname);
         syslog.appName(settings.syslog_app_name);
         syslog.defaultPriority(LOG_LOCAL0);
-        if (strncmp(settings.syslog_log_level, "EMERG", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+        if (strncmp(settings.syslog_log_level, "EMERG", MAX_LENGTH_SYSLOG_LOG_LEVEL) == 0) {
             syslog.logMask(LOG_UPTO(LOG_EMERG));
-        } else if (strncmp(settings.syslog_log_level, "ALERT", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+        } else if (strncmp(settings.syslog_log_level, "ALERT", MAX_LENGTH_SYSLOG_LOG_LEVEL) == 0) {
             syslog.logMask(LOG_UPTO(LOG_ALERT));
-        } else if (strncmp(settings.syslog_log_level, "CRIT", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+        } else if (strncmp(settings.syslog_log_level, "CRIT", MAX_LENGTH_SYSLOG_LOG_LEVEL) == 0) {
             syslog.logMask(LOG_UPTO(LOG_CRIT));
-        } else if (strncmp(settings.syslog_log_level, "ERR", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+        } else if (strncmp(settings.syslog_log_level, "ERR", MAX_LENGTH_SYSLOG_LOG_LEVEL) == 0) {
             syslog.logMask(LOG_UPTO(LOG_ERR));
-        } else if (strncmp(settings.syslog_log_level, "ERR", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+        } else if (strncmp(settings.syslog_log_level, "ERR", MAX_LENGTH_SYSLOG_LOG_LEVEL) == 0) {
             syslog.logMask(LOG_UPTO(LOG_ERR));
-        } else if (strncmp(settings.syslog_log_level, "WARNING", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+        } else if (strncmp(settings.syslog_log_level, "WARNING", MAX_LENGTH_SYSLOG_LOG_LEVEL) == 0) {
             syslog.logMask(LOG_UPTO(LOG_WARNING));
-        } else if (strncmp(settings.syslog_log_level, "NOTICE", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+        } else if (strncmp(settings.syslog_log_level, "NOTICE", MAX_LENGTH_SYSLOG_LOG_LEVEL) == 0) {
             syslog.logMask(LOG_UPTO(LOG_NOTICE));
-        } else if (strncmp(settings.syslog_log_level, "INFO", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+        } else if (strncmp(settings.syslog_log_level, "INFO", MAX_LENGTH_SYSLOG_LOG_LEVEL) == 0) {
             syslog.logMask(LOG_UPTO(LOG_INFO));
-        } else if (strncmp(settings.syslog_log_level, "DEBUG", MAX_LENGTH_SYSLOG_LOG_LEVEL) != 0) {
+        } else if (strncmp(settings.syslog_log_level, "DEBUG", MAX_LENGTH_SYSLOG_LOG_LEVEL) == 0) {
             syslog.logMask(LOG_UPTO(LOG_DEBUG));
+        } else {
+            syslog.logMask(LOG_UPTO(LOG_WARNING));
         }
     }
 
