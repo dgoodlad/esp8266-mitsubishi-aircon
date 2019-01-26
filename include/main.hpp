@@ -70,7 +70,7 @@ unsigned long lastHeatpumpSettingsChange = 0;
 
 typedef struct {
     char mqtt_host[MAX_LENGTH_MQTT_HOST] = "";
-    char mqtt_port[MAX_LENGTH_MQTT_PORT] = "8080";
+    char mqtt_port[MAX_LENGTH_MQTT_PORT] = "1883";
     char mqtt_username[MAX_LENGTH_MQTT_USERNAME] = "";
     char mqtt_password[MAX_LENGTH_MQTT_PASSWORD] = "";
     char mqtt_topic_prefix[MAX_LENGTH_MQTT_TOPIC_PREFIX] = "";
@@ -110,6 +110,11 @@ char mqtt_topic_mode_command[128];
 char mqtt_topic_temperature_command[128];
 char mqtt_topic_fan_command[128];
 char mqtt_topic_vane_command[128];
+
+#define MQTT_DISCONNECTED false
+#define MQTT_CONNECTED true
+bool mqttStatus;
+long mqttLastSeen;
 
 Bounce clearSettingsButton;
 bool shouldStartConfigAP = false;
