@@ -268,7 +268,8 @@ void loadConfig() {
                 size_t size = configFile.size();
                 std::unique_ptr<char[]> buf(new char[size]);
                 configFile.readBytes(buf.get(), size);
-                DynamicJsonBuffer jsonBuffer;
+                const int capacity = JSON_OBJECT_SIZE(10);
+                StaticJsonBuffer<capacity> jsonBuffer;
                 JsonObject& json = jsonBuffer.parseObject(buf.get());
                 if (json.success()) {
                     if (json.containsKey("mqtt_host"))
