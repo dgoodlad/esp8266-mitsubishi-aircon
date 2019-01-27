@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name mitsu-huzzah-interface)(type Legacy)(uri /home/dgoodlad/src/esp8266-mitsubishi-aircon/pcb/mitsu-huzzah-interface.lib)(options "")(descr ""))
+)

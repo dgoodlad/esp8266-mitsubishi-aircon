@@ -1,0 +1,8 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP AP2112K-3.3TRG1
+D 600mA CMOS LDO REGULATOR WITH ENABLE
+K regulator
+$ENDCMP
+#
+#End Doc Library
