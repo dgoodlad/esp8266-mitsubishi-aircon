@@ -87,6 +87,15 @@ void saveConfigCallback () {
     shouldSaveConfig = true;
 }
 
+void heatpumpOnConnectCallback() {
+    #ifdef SWAP_PINS
+    if (syslogEnabled) syslog.log(LOG_INFO, "heatpumpOnConnectCallback: Swapping serial pins");
+    Serial.swap();
+    #else
+    if (syslogEnabled) syslog.log(LOG_INFO, "heatpumpOnConnectCallback: NOT swapping serial pins");
+    #endif
+}
+
 void heatpumpPacketCallback(byte *packet, int length, char* message) {
     char buffer[256];
     int offset = 0;
@@ -577,6 +586,7 @@ void setup() {
     if (syslogEnabled) syslog.log(LOG_INFO, "mqttClient.connect()");
     mqttClient.connect();
 
+    heatpump.setOnConnectCallback(heatpumpOnConnectCallback);
     #ifdef PACKET_DEBUG
     heatpump.setPacketCallback(heatpumpPacketCallback);
     #endif
@@ -585,7 +595,7 @@ void setup() {
 
     if (heatPumpDetected) {
         if (syslogEnabled) syslog.log(LOG_INFO, "Heatpump: DETECTED. Connecting!");
-        heatpump.connect(&Serial, SWAP_PINS);
+        heatpump.connect(&Serial);
     }
 }
 

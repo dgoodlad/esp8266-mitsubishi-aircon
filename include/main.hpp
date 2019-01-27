@@ -10,16 +10,15 @@
 
 const char* otaPassword = "aircon";
 
-#ifdef HARDWARE_V01
-#define SWAP_PINS false
+#ifndef HARDWARE_V02
+#ifndef HARDWARE_V01
+// Default to hardware v02 if none set. hardware v01 is unlikely to be used by
+// anyone in practice.
+#define HARDWARE_V02
+#endif
 #endif
 
 #ifdef HARDWARE_V02
-#define SWAP_PINS true
-#endif
-
-#ifndef SWAP_PINS
-#define HARDWARE_V02
 #define SWAP_PINS true
 #endif
 
